@@ -1,7 +1,7 @@
-Welcome to Computer Organization, Spring 2024!
-==================================================
+Welcome to Accelerator Architectures for Machine Learning, Fall 2024!
+======================================================================
 
-This course aims to introduce the design and implementation of simple CPU.
+This course aims to build up students a foundation to understand the programming and accelerator architectural functions.
 You'll learn both concept and implementation from a series of labs.
 
 

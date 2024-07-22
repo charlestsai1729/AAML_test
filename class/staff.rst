@@ -10,17 +10,12 @@ Instructor
 Teaching assistants
 *******************
 
-**Kai-Chieh Hsu**
-
-* kaijhsu.cs12 [at] nycu.edu.tw
-* Location: EC619
-
 **Yu-Lun Ning**
 
 * en.cs10 [at] nycu.edu.tw
 * Location: EC619
 
-**Cheng-Hsi Liu**
+**Cheng-Han Tsai**
 
-* brianliu.cs11 [at] nycu.edu.tw
+* charlestsai1729.cs10 [at] nycu.edu.tw
 * Location: EC619

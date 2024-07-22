@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Staff &#8212; CSIC30066: Accelerator Architectures for Machine Learning</title>
+    <title>Lab 2 Quantization and SIMD MAC &#8212; CSIC30066: Accelerator Architectures for Machine Learning</title>
   
   
   
@@ -40,11 +40,10 @@
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'class/staff';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'labs/Lab 2';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="../labs/Lab%200.html" />
-    <link rel="prev" title="Welcome to Accelerator Architectures for Machine Learning, Fall 2024!" href="../index.html" />
+    <link rel="prev" title="Goals of this lab" href="2023_lab2.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -149,17 +148,22 @@
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Class:</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Staff</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../class/staff.html">Staff</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Labs:</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../labs/md_test.html">Goals of this lab</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="2023_lab1.html">Goals of this lab</a></li>
 
 
 
 
-<li class="toctree-l1"><a class="reference internal" href="../labs/test.html">Lab 0 : Environment Setup &amp; simple verilog practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2023_lab2.html">Goals of this lab</a></li>
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lab 2 Quantization and SIMD MAC</a></li>
 </ul>
 
     </div>
@@ -214,7 +218,7 @@
       
       
       
-      <li><a href="../_sources/class/staff.rst" target="_blank"
+      <li><a href="../_sources/labs/Lab 2.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -224,7 +228,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.rst</span>
+<span class="btn__text-container">.md</span>
 </a>
 </li>
       
@@ -298,7 +302,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Staff</h1>
+    <h1>Lab 2 Quantization and SIMD MAC</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -308,8 +312,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instructor">Instructor</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teaching-assistants">Teaching assistants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-quantized-model-10">Run Quantized Model - 10%</a></li>
 </ul>
             </nav>
         </div>
@@ -321,28 +325,20 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="staff">
-<h1>Staff<a class="headerlink" href="#staff" title="Link to this heading">#</a></h1>
-<section id="instructor">
-<h2>Instructor<a class="headerlink" href="#instructor" title="Link to this heading">#</a></h2>
-<p><strong>Tsung Tai Yeh</strong></p>
-<ul class="simple">
-<li><p>Email: ttyeh [at] cs.nycu.edu.tw</p></li>
-<li><p>Location: EC707</p></li>
-</ul>
+  <section id="lab-2-quantization-and-simd-mac">
+<h1>Lab 2 Quantization and SIMD MAC<a class="headerlink" href="#lab-2-quantization-and-simd-mac" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>In the previous lab, we successfully ran the float32 Keyword Spotting (KWS) model on CFU-Playground. In this lab, we will focus on running a quantized int8 KWS model and leverage the benefits of quantization to achieve acceleration.</p>
 </section>
-<section id="teaching-assistants">
-<h2>Teaching assistants<a class="headerlink" href="#teaching-assistants" title="Link to this heading">#</a></h2>
-<p><strong>Yu-Lun Ning</strong></p>
-<ul class="simple">
-<li><p>en.cs10 [at] nycu.edu.tw</p></li>
-<li><p>Location: EC619</p></li>
-</ul>
-<p><strong>Cheng-Han Tsai</strong></p>
-<ul class="simple">
-<li><p>charlestsai1729.cs10 [at] nycu.edu.tw</p></li>
-<li><p>Location: EC619</p></li>
-</ul>
+<section id="run-quantized-model-10">
+<h2>Run Quantized Model - 10%<a class="headerlink" href="#run-quantized-model-10" title="Link to this heading">#</a></h2>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>CFU-Playground/proj
+$<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>&lt;lab1<span class="w"> </span>proj<span class="w"> </span>folder&gt;<span class="w"> </span>&lt;lab2<span class="w"> </span>proj<span class="w"> </span>folder&gt;
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>&lt;lab2<span class="w"> </span>proj<span class="w"> </span>folder&gt;
+</pre></div>
+</div>
+<p>Quantizing float model to int8 is kinda complicated and is not the focal point of this lab, so we have provided the quatized model for you.</p>
 </section>
 </section>
 
@@ -358,22 +354,13 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../index.html"
+       href="2023_lab2.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Welcome to Accelerator Architectures for Machine Learning, Fall 2024!</p>
+        <p class="prev-next-title">Goals of this lab</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="../labs/Lab%200.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -391,8 +378,8 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instructor">Instructor</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teaching-assistants">Teaching assistants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-quantized-model-10">Run Quantized Model - 10%</a></li>
 </ul>
   </nav></div>
 

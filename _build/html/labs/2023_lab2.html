@@ -1,0 +1,603 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Goals of this lab &#8212; CSIC30066: Accelerator Architectures for Machine Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'labs/2023_lab2';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lab 2 Quantization and SIMD MAC" href="Lab%202.html" />
+    <link rel="prev" title="Goals of this lab" href="2023_lab1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">CSIC30066: Accelerator Architectures for Machine Learning</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Class:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../class/staff.html">Staff</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Labs:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="2023_lab1.html">Goals of this lab</a></li>
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Goals of this lab</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Lab%202.html">Lab 2 Quantization and SIMD MAC</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/labs/2023_lab2.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Goals of this lab</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Goals of this lab</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#predict-the-label-correctly-of-quantized-ds-cnn-stream-fe-model-10">Predict the label correctly of quantized ds_cnn_stream_fe model -10%</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-cfu-v-80">Custom cfu.v -80%</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modify-cfu-v-30">Modify cfu.v -30%</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modify-conv-h-50">Modify conv.h -50%</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-mac-operation-cycles-of-original-model-and-the-quantized-model-10">Calculate MAC operation cycles of original model and the quantized model-10%</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="goals-of-this-lab">
+<h1>Goals of this lab<a class="headerlink" href="#goals-of-this-lab" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="#Person-Detection-int8-model--10%25"><span class="xref myst">Predict the label correctly of quantized ds_cnn_stream_fe model. -10%</span></a></p></li>
+<li><p><a class="reference internal" href="#Custom-cfu.v--80%25"><span class="xref myst">Design a custom CFU to create a instruction that performs a SIMD multiply-and-accumulate operation. -80%</span></a></p></li>
+<li><p><a class="reference internal" href="#Calculate-MAC-operation-cycles-of-original-model-and-the-quantized-model--10%25"><span class="xref myst">Calculate MAC operation cycles of original model and the quantized model-10%</span></a></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="background">
+<h1>Background<a class="headerlink" href="#background" title="Link to this heading">#</a></h1>
+<p>The KWS model can work well in <a class="reference external" href="https://hackmd.io/&#64;pei1005/B1QBvAaTn">lab1</a>. But there still have potential that we can enhance the performance by adding some additional implementations.
+<img alt="" src="https://hackmd.io/_uploads/S1au-JQya.png" />
+Figure 1. The cycle spent by the float32 KWS model executed in a serial manner.</p>
+</section>
+<section id="predict-the-label-correctly-of-quantized-ds-cnn-stream-fe-model-10">
+<h1>Predict the label correctly of quantized ds_cnn_stream_fe model -10%<a class="headerlink" href="#predict-the-label-correctly-of-quantized-ds-cnn-stream-fe-model-10" title="Link to this heading">#</a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>CFU-Playground/proj
+$<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span><span class="p">&amp;</span>lt<span class="p">;</span>your<span class="w"> </span>lab1<span class="w"> </span>proj<span class="w"> </span>folder<span class="p">&amp;</span>gt<span class="p">;</span><span class="w"> </span><span class="p">&amp;</span>lt<span class="p">;</span>lab2<span class="w"> </span>proj<span class="w"> </span>name<span class="p">&amp;</span>gt<span class="p">;</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="p">&amp;</span>lt<span class="p">;</span>lab2<span class="w"> </span>proj<span class="w"> </span>name<span class="p">&amp;</span>gt<span class="p">;</span>
+</pre></div>
+</div>
+<p>Since that quantizing float model to int8 is quite complicated. So we provide the quatized model to you. You can simply replace <strong>CFU-Playground/common/src/models/ds_cnn_stream_fe/ds_cnn_stream_fe.tflite</strong> with the new model.
+<a class="reference external" href="https://drive.google.com/file/d/1Hh_PMazoAwXZ-hHWpA5fDLl-6PTbgDZu/view?usp=drive_link">Google drive download link</a></p>
+<p>Ensure that the ds_cnn_stream_fe model is included.
+<img alt="" src="https://hackmd.io/_uploads/BJS3g0Wka.png" /></p>
+<p>Builds and programs gateware. Builds and loads C program.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make clean
+$ make prog USE_VIVADO=1 TTY=/dev/ttyUSB0
+$ make load BUILD_JOBS=4 TTY=/dev/ttyUSB1
+</pre></div>
+</div>
+<p>Results show that most of cycles are passed during conv_2D processes. So we’re gonna try to improve it.
+<img alt="" src="https://hackmd.io/_uploads/ry7FC4txp.png" />
+Figure2. The cycle spent by the quantized int8 KWS model executed in a serial manner</p>
+</section>
+<section id="custom-cfu-v-80">
+<h1>Custom cfu.v -80%<a class="headerlink" href="#custom-cfu-v-80" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://cfu-playground.readthedocs.io/en/latest/step-by-step.html">You can find some hints here.</a></p>
+<section id="modify-cfu-v-30">
+<h2>Modify cfu.v -30%<a class="headerlink" href="#modify-cfu-v-30" title="Link to this heading">#</a></h2>
+<p>Build a custom cfu which can perform SIMD operation. The goal is to calculate 4 product values simultaneously.</p>
+<div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="k">module</span><span class="w"> </span><span class="n">Cfu</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">cmd_valid</span><span class="p">,</span>
+<span class="w">  </span><span class="k">output</span><span class="w">              </span><span class="n">cmd_ready</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">      </span><span class="p">[</span><span class="mh">9</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">cmd_payload_function_id</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">      </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">cmd_payload_inputs_0</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">      </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">cmd_payload_inputs_1</span><span class="p">,</span>
+<span class="w">  </span><span class="k">output</span><span class="w"> </span><span class="kt">reg</span><span class="w">          </span><span class="n">rsp_valid</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">rsp_ready</span><span class="p">,</span>
+<span class="w">  </span><span class="k">output</span><span class="w"> </span><span class="kt">reg</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">rsp_payload_outputs_0</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">reset</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">               </span><span class="n">clk</span>
+<span class="p">);</span>
+<span class="w">  </span><span class="k">localparam</span><span class="w"> </span><span class="n">InputOffset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">$signed</span><span class="p">(</span><span class="mh">9</span><span class="o">&amp;</span><span class="p">#</span><span class="mh">39</span><span class="p">;</span><span class="n">d128</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// SIMD multiply step:</span>
+<span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="k">signed</span><span class="w"> </span><span class="p">[</span><span class="mh">15</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">prod_0</span><span class="p">,</span><span class="w"> </span><span class="n">prod_1</span><span class="p">,</span><span class="w"> </span><span class="n">prod_2</span><span class="p">,</span><span class="w"> </span><span class="n">prod_3</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">prod_0</span><span class="w"> </span><span class="o">=</span><span class="w">  </span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">prod_1</span><span class="w"> </span><span class="o">=</span><span class="w">  </span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">prod_2</span><span class="w"> </span><span class="o">=</span><span class="w">  </span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">prod_3</span><span class="w"> </span><span class="o">=</span><span class="w">  </span>
+<span class="w">      </span>
+<span class="w">  </span><span class="kt">wire</span><span class="w"> </span><span class="k">signed</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">sum_prods</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">sum_prods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prod_0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">prod_1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">prod_2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">prod_3</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Only not ready for a command when we have a response.</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">cmd_ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">rsp_valid</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+</section>
+<section id="modify-conv-h-50">
+<h2>Modify conv.h -50%<a class="headerlink" href="#modify-conv-h-50" title="Link to this heading">#</a></h2>
+<p>Run the commands in your project folder.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>src/tensorflow/lite/kernels/internal/reference/integer_ops
+$<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>../../third_party/tflite-micro/tensorflow/lite/kernels/internal/reference/integer_ops/conv.h<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>src/tensorflow/lite/kernels/internal/reference/integer_ops/conv.h
+</pre></div>
+</div>
+<p>Since the int8 model will reference conv.h in integer_ops folder. So in order to enhance the performance, we need to modify it.</p>
+<p>There are some tips for following step.</p>
+<ol class="arabic simple">
+<li><p>Stronly recommend you too view the whole structure of .tflite file of this lab. You can view the layers graph of it by uploading it to this <a class="reference external" href="https://netron.app/">website</a>.</p></li>
+<li><p>Find out what kind of parameters will affect your implementation of custom op.</p></li>
+</ol>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include &amp;#34;playground_util/print_params.h&amp;#34;</span>
+<span class="cm">/* ... */</span>
+<span class="kr">inline</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">ConvPerChannel</span><span class="p">(</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">ConvParams</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="n">params</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int32_t</span><span class="o">*</span><span class="w"> </span><span class="n">output_multiplier</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int32_t</span><span class="o">*</span><span class="w"> </span><span class="n">output_shift</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RuntimeShape</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="n">input_shape</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int8_t</span><span class="o">*</span><span class="w"> </span><span class="n">input_data</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RuntimeShape</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="n">filter_shape</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int8_t</span><span class="o">*</span><span class="w"> </span><span class="n">filter_data</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RuntimeShape</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="n">bias_shape</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int32_t</span><span class="o">*</span><span class="w"> </span><span class="n">bias_data</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RuntimeShape</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="n">output_shape</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">int8_t</span><span class="o">*</span><span class="w"> </span><span class="n">output_data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Format is:</span>
+<span class="w">  </span><span class="c1">// &amp;#34;padding_type&amp;#34;, &amp;#34;padding_width&amp;#34;, &amp;#34;padding_height&amp;#34;, &amp;#34;padding_width_offset&amp;#34;,</span>
+<span class="w">  </span><span class="c1">// &amp;#34;padding_height_offset&amp;#34;, &amp;#34;stride_width&amp;#34;, &amp;#34;stride_height&amp;#34;,</span>
+<span class="w">  </span><span class="c1">// &amp;#34;dilation_width_factor&amp;#34;, &amp;#34;dilation_height_factor&amp;#34;, &amp;#34;input_offset&amp;#34;,</span>
+<span class="w">  </span><span class="c1">// &amp;#34;weights_offset&amp;#34;, &amp;#34;output_offset&amp;#34;, &amp;#34;output_multiplier&amp;#34;, &amp;#34;output_shift&amp;#34;,</span>
+<span class="w">  </span><span class="c1">// &amp;#34;quantized_activation_min&amp;#34;, &amp;#34;quantized_activation_max&amp;#34;,</span>
+<span class="w">  </span><span class="c1">// &amp;#34;input_batches&amp;#34;, &amp;#34;input_height&amp;#34;, &amp;#34;input_width&amp;#34;, &amp;#34;input_depth&amp;#34;,</span>
+<span class="w">  </span><span class="c1">// &amp;#34;filter_output_depth&amp;#34;, &amp;#34;filter_height&amp;#34;, &amp;#34;filter_width&amp;#34;, &amp;#34;filter_input_depth&amp;#34;,</span>
+<span class="w">  </span><span class="c1">// &amp;#34;output_batches&amp;#34;, &amp;#34;output_height&amp;#34;, &amp;#34;output_width&amp;#34;, &amp;#34;output_depth&amp;#34;,</span>
+<span class="w">  </span><span class="n">print_conv_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="w"> </span><span class="n">input_shape</span><span class="p">,</span><span class="w"> </span><span class="n">filter_shape</span><span class="p">,</span><span class="w"> </span><span class="n">output_shape</span><span class="p">);</span>
+
+<span class="w">  </span><span class="cm">/* ... */</span>
+</pre></div>
+</div>
+<p>Use <strong>print_conv_params(params, input_shape, filter_shape, output_shape)</strong> to show the parameters of every conv layers.</p>
+<ol class="arabic simple" start="3">
+<li><p>Replace the some parts of original operations with cfu_op0. And don’t forget to add <strong>#include “cfu.h”</strong> in the file.</p></li>
+</ol>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">out_channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">out_channel</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="n">output_depth</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">out_channel</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">;</span>
+<span class="w">          </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">filter_y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">filter_y</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="n">filter_height</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">filter_y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">in_y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in_y_origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dilation_height_factor</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">filter_y</span><span class="p">;</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">filter_x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">filter_x</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="n">filter_width</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">filter_x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">in_x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in_x_origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dilation_width_factor</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">filter_x</span><span class="p">;</span>
+
+<span class="w">              </span><span class="c1">// Zero padding by omitting the areas outside the image.</span>
+<span class="w">              </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_point_inside_image</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                  </span><span class="p">(</span><span class="n">in_x</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="p">(</span><span class="n">in_x</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="n">input_width</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="p">(</span><span class="n">in_y</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span>
+<span class="w">                  </span><span class="p">(</span><span class="n">in_y</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="n">input_height</span><span class="p">);</span>
+
+<span class="w">              </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">is_point_inside_image</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">              </span><span class="p">}</span>
+
+<span class="w">              </span><span class="k">for</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+
+
+<span class="w">                </span><span class="n">acc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">              </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">          </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The SIMD and quantization operation should achieve around 10X speedup over the KWS model composed of FP32 and executed in a serial manner
+<img alt="" src="https://hackmd.io/_uploads/BJ2CDA-yT.png" />
+Figure 3. The cycle spent by the quantized KWS model with SIMD implementation executed in a serial manner.</p>
+<p>Show the improvements of your result. And also show that the labels are still predicted correctly. For example, label 8 is correctly predicted.
+<img alt="" src="https://hackmd.io/_uploads/H1SowRbJp.png" />
+Figure 4. label8 prediction</p>
+</section>
+</section>
+<section id="calculate-mac-operation-cycles-of-original-model-and-the-quantized-model-10">
+<h1>Calculate MAC operation cycles of original model and the quantized model-10%<a class="headerlink" href="#calculate-mac-operation-cycles-of-original-model-and-the-quantized-model-10" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://hackmd.io/gl8LybZhTLWjic-V4iFjrQ?view">Reference: LAB1</a>
+Show the results in this lab. And tell us what kind of changes you’ve made can get the best result.</p>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2023_lab1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Goals of this lab</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Lab%202.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lab 2 Quantization and SIMD MAC</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Goals of this lab</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#predict-the-label-correctly-of-quantized-ds-cnn-stream-fe-model-10">Predict the label correctly of quantized ds_cnn_stream_fe model -10%</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-cfu-v-80">Custom cfu.v -80%</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modify-cfu-v-30">Modify cfu.v -30%</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modify-conv-h-50">Modify conv.h -50%</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-mac-operation-cycles-of-original-model-and-the-quantized-model-10">Calculate MAC operation cycles of original model and the quantized model-10%</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By  NYCU CAS-Lab
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, NYCU CAS-Lab.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
