@@ -164,7 +164,7 @@
 
 
 
-<li class="toctree-l1"><a class="reference internal" href="Lab%202.html">Lab 2 Quantization and SIMD MAC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Lab%202.html">Lab 2 : Quantization and SIMD MAC</a></li>
 </ul>
 
     </div>
@@ -418,9 +418,9 @@ $<span class="w"> </span>./scripts/setup
 <section id="install-toolchain-option-4d-install-use-vivado">
 <h3>4. Install Toolchain (<a class="reference external" href="https://cfu-playground.readthedocs.io/en/latest/vivado-install.html">Option 4d: Install/Use Vivado</a>)<a class="headerlink" href="#install-toolchain-option-4d-install-use-vivado" title="Link to this heading">#</a></h3>
 <p><a class="reference external" href="https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/archive.html">Vivado 2020.1 Download page</a></p>
-<p>::: info
-:bulb: Note that the software can take up to 8 hours to     download, so plan to do that ahead of time.
-:::</p>
+<div class="info docutils">
+<p>:bulb: Note that the software can take up to 8 hours to     download, so plan to do that ahead of time.</p>
+</div>
 </section>
 <section id="install-risc-v-toolchain-download-linux-ubuntu">
 <h3>5. Install RISC-V toolchain (<a class="reference external" href="https://github.com/sifive/freedom-tools/releases/tag/v2020.08.0">Download linux-ubuntu</a>)<a class="headerlink" href="#install-risc-v-toolchain-download-linux-ubuntu" title="Link to this heading">#</a></h3>
@@ -553,12 +553,12 @@ Unzip <code class="docutils literal notranslate"><span class="pre">label.zip</sp
 <section id="cfu-playground-common-src-models-ds-cnn-stream-fe-ds-cnn-cc">
 <h4><code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/models/ds_cnn_stream_fe/ds_cnn.cc</span></code><a class="headerlink" href="#cfu-playground-common-src-models-ds-cnn-stream-fe-ds-cnn-cc" title="Link to this heading">#</a></h4>
 <p>Design the following codes to run inference on the model. You need to use files in <code class="docutils literal notranslate"><span class="pre">models/label/</span></code> as your inputs which have already include in the following codes. Then print all 12 output scores.</p>
-<p>::: info
-:bulb: You can refer to the codes of other models in <code class="docutils literal notranslate"><span class="pre">common/src/models/</span></code> and use the functions in <code class="docutils literal notranslate"><span class="pre">common/src/tflite.cc</span></code>
-:::
-:::warning
-:warning: Output scores should stored as uint32_t because we can’t print floats.
-:::</p>
+<div class="info docutils">
+<p>:bulb: You can refer to the codes of other models in <code class="docutils literal notranslate"><span class="pre">common/src/models/</span></code> and use the functions in <code class="docutils literal notranslate"><span class="pre">common/src/tflite.cc</span></code></p>
+</div>
+<div class="warning docutils">
+<p>:warning: Output scores should stored as uint32_t because we can’t print floats.</p>
+</div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include &amp;#34;models/ds_cnn_stream_fe/ds_cnn.h&amp;#34;</span>
 <span class="cp">#include &amp;lt;stdio.h&amp;gt;</span>
 <span class="cp">#include &amp;#34;menu.h&amp;#34;</span>
@@ -622,9 +622,9 @@ Unzip <code class="docutils literal notranslate"><span class="pre">label.zip</sp
 <span class="cp">#endif</span>
 </pre></div>
 </div>
-<p>::: info
-:bulb: The size of kTensorArenaSize will depend on the model you’re using, and may need to be determined by experimentation. You should try again and again to get minist value.
-:::</p>
+<div class="info docutils">
+<p>:bulb: The size of kTensorArenaSize will depend on the model you’re using, and may need to be determined by experimentation. You should try again and again to get minist value.</p>
+</div>
 </section>
 <section id="cfu-playground-proj-my-first-cfu-makefile">
 <h4><code class="docutils literal notranslate"><span class="pre">CFU-Playground/proj/my_first_cfu/Makefile</span></code><a class="headerlink" href="#cfu-playground-proj-my-first-cfu-makefile" title="Link to this heading">#</a></h4>
@@ -641,15 +641,15 @@ $<span class="w"> </span>make<span class="w"> </span>prog<span class="w"> </span
 $<span class="w"> </span>make<span class="w"> </span>load<span class="w"> </span><span class="nv">BUILD_JOBS</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">TTY</span><span class="o">=</span>/dev/ttyUSB1
 </pre></div>
 </div>
-<p>::: info
-:bulb: It’s successful to load a model that you get the following output. Then you could get <strong>20%</strong> points.
-:::</p>
+<div class="info docutils">
+<p>:bulb: It’s successful to load a model that you get the following output. Then you could get <strong>20%</strong> points.</p>
+</div>
 <p><img alt="" src="https://hackmd.io/_uploads/HyUjALkC3.png" /></p>
 <p>Press a number to run a test.</p>
 <p><img alt="" src="https://hackmd.io/_uploads/BJnzVAua3.png" /></p>
-<p>::: info
-:bulb: If you get <strong>all</strong> of the following output scores correct, you could get all the points of this part which means <strong>60%</strong> points.
-:::</p>
+<div class="info docutils">
+<p>:bulb: If you get <strong>all</strong> of the following output scores correct, you could get all the points of this part which means <strong>60%</strong> points.</p>
+</div>
 <p><img alt="" src="https://hackmd.io/_uploads/rkTp0T6C3.png" /></p>
 </section>
 </section>

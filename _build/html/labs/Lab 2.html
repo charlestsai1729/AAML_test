@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Lab 2 Quantization and SIMD MAC &#8212; CSIC30066: Accelerator Architectures for Machine Learning</title>
+    <title>Lab 2 : Quantization and SIMD MAC &#8212; CSIC30066: Accelerator Architectures for Machine Learning</title>
   
   
   
@@ -163,7 +163,7 @@
 
 
 
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lab 2 Quantization and SIMD MAC</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lab 2 : Quantization and SIMD MAC</a></li>
 </ul>
 
     </div>
@@ -302,7 +302,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Lab 2 Quantization and SIMD MAC</h1>
+    <h1>Lab 2 : Quantization and SIMD MAC</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -314,6 +314,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-quantized-model-10">Run Quantized Model - 10%</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"></a></li>
 </ul>
             </nav>
         </div>
@@ -326,7 +327,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="lab-2-quantization-and-simd-mac">
-<h1>Lab 2 Quantization and SIMD MAC<a class="headerlink" href="#lab-2-quantization-and-simd-mac" title="Link to this heading">#</a></h1>
+<h1>Lab 2 : Quantization and SIMD MAC<a class="headerlink" href="#lab-2-quantization-and-simd-mac" title="Link to this heading">#</a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p>In the previous lab, we successfully ran the float32 Keyword Spotting (KWS) model on CFU-Playground. In this lab, we will focus on running a quantized int8 KWS model and leverage the benefits of quantization to achieve acceleration.</p>
@@ -338,7 +339,36 @@ $<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>&lt
 $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>&lt;lab2<span class="w"> </span>proj<span class="w"> </span>folder&gt;
 </pre></div>
 </div>
-<p>Quantizing float model to int8 is kinda complicated and is not the focal point of this lab, so we have provided the quatized model for you.</p>
+<p>Quantizing a float model to int8 can be quite complex and is not the primary focus of this lab. Therefore, we have provided the quantized model for you. You can simply replace <code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/models/ds_cnn_stream_fe/ds_cnn_stream_fe.tflite</span></code> with the new model provided below.</p>
+<blockquote>
+<div><p><a class="reference external" href="https://drive.google.com/file/d/1CgEhJm0IoaXx3ULrn-Dfuw3LH83SnFlV/view?usp=sharing">ds_cnn_stream_fe.tflite</a></p>
+</div></blockquote>
+<p>Ensure that the <code class="docutils literal notranslate"><span class="pre">ds_cnn_stream_fe</span></code> model is included in the project’s Makefile. Additionally, you may want to include the <code class="docutils literal notranslate"><span class="pre">pdti8</span></code> model to verify if your design can pass the golden test.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Uncomment to include specified model in built binary</span>
+<span class="nv">DEFINES</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>INCLUDE_MODEL_PDTI8
+<span class="c1">#DEFINES += INCLUDE_MODEL_MICRO_SPEECH</span>
+<span class="c1">#DEFINES += INCLUDE_MODEL_MAGIC_WAND</span>
+<span class="c1">#DEFINES += INCLUDE_MODEL_MNV2</span>
+<span class="c1">#DEFINES += INCLUDE_MODEL_HPS</span>
+<span class="c1">#DEFINES += INCLUDE_MODEL_MLCOMMONS_TINY_V01_ANOMD</span>
+<span class="c1">#DEFINES += INCLUDE_MODEL_MLCOMMONS_TINY_V01_IMGC</span>
+<span class="c1">#DEFINES += INCLUDE_MODEL_MLCOMMONS_TINY_V01_KWS</span>
+<span class="c1">#DEFINES += INCLUDE_MODEL_MLCOMMONS_TINY_V01_VWW</span>
+<span class="nv">DEFINES</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>INCLUDE_MODEL_DS_CNN_STREAM_FE
+</pre></div>
+</div>
+<p>Build and load the hardware and software to test.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>make<span class="w"> </span>clean
+$<span class="w"> </span>make<span class="w"> </span>prog
+$<span class="w"> </span>make<span class="w"> </span>load
+</pre></div>
+</div>
+<p>The result should look like the image below. As with the previous lab, the predicted results should also be correct.</p>
+<p><img alt="alt text" src="../_images/quantized.png" /></p>
+<p>You should observe a significant reduction in the number of cycles, as the quantized model eliminates the need for complex floating-point calculations. However, we can further enhance performance by leveraging another benefit of quantization: reduced bit width.</p>
+</section>
+<section id="id1">
+<h2><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -380,6 +410,7 @@ $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>&lt;l
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-quantized-model-10">Run Quantized Model - 10%</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"></a></li>
 </ul>
   </nav></div>
 
