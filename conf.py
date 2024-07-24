@@ -29,7 +29,8 @@ author = ' NYCU CAS-Lab'
 extensions = ['myst_parser']
 
 myst_enable_extensions = [
-    "colon_fence"
+    "colon_fence",
+    "html_image"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
