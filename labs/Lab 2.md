@@ -203,13 +203,22 @@ for (int out_channel = 0; out_channel < output_depth; ++out_channel) {
 ```
 
 The SIMD MAC implementation on the Convolution should achieve at least a 10x speedup compared to the KWS model composed of FP32 and executed in a serial manner. The prediction on labels should also be correct.
-![alt text](images/lab2/conv_result.png)
+
+<img src="images/lab2/conv_result.png" width="300px">
 
 To get full score, the cycles of inferencing the quantized model should not beyond 2500M, and the prediction of all 5 labels should be correct.
 
 ### Accelerate Fully Connected - 20%
 
-In this part, please use the technique of SIMD MAC to accelerate the Fully Connected Layer. The execution **ticks** after acceleration should be **lower than 35**.
+In this part, please use the technique of SIMD MAC to accelerate the Fully Connected Layer. 
+
+```sh
+$ cp \
+  ../../third_party/tflite-micro/tensorflow/lite/kernels/internal/reference/integer_ops/fully_connected.h \
+  src/tensorflow/lite/kernels/internal/reference/integer_ops/fully_connected.h
+```
+
+The model uses per-channel fully connected layer; therefore, the function you need to modify is the third one in `fully_connected.h`. After implementing acceleration, the execution `ticks` of your function should be `fewer than 35`.
 
 <img src="images/lab2/before.png" width="200px">
 <img src="images/lab2/after.png" width="200px">

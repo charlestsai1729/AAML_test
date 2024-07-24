@@ -534,14 +534,20 @@ $<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The SIMD MAC implementation on the Convolution should achieve at least a 10x speedup compared to the KWS model composed of FP32 and executed in a serial manner. The prediction on labels should also be correct.
-<img alt="alt text" src="../_images/conv_result.png" /></p>
+<p>The SIMD MAC implementation on the Convolution should achieve at least a 10x speedup compared to the KWS model composed of FP32 and executed in a serial manner. The prediction on labels should also be correct.</p>
+<a class="reference internal image-reference" href="../_images/conv_result.png"><img alt="../_images/conv_result.png" src="../_images/conv_result.png" style="width: 300px;" /></a>
 <p>To get full score, the cycles of inferencing the quantized model should not beyond 2500M, and the prediction of all 5 labels should be correct.</p>
 </section>
 </section>
 <section id="accelerate-fully-connected-20">
 <h3>Accelerate Fully Connected - 20%<a class="headerlink" href="#accelerate-fully-connected-20" title="Link to this heading">#</a></h3>
-<p>In this part, please use the technique of SIMD MAC to accelerate the Fully Connected Layer. The execution <strong>ticks</strong> after acceleration should be <strong>lower than 35</strong>.</p>
+<p>In this part, please use the technique of SIMD MAC to accelerate the Fully Connected Layer.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>../../third_party/tflite-micro/tensorflow/lite/kernels/internal/reference/integer_ops/fully_connected.h<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>src/tensorflow/lite/kernels/internal/reference/integer_ops/fully_connected.h
+</pre></div>
+</div>
+<p>The model uses per-channel fully connected layer; therefore, the function you need to modify is the third one in <code class="docutils literal notranslate"><span class="pre">fully_connected.h</span></code>. After implementing acceleration, the execution <code class="docutils literal notranslate"><span class="pre">ticks</span></code> of your function should be <code class="docutils literal notranslate"><span class="pre">fewer</span> <span class="pre">than</span> <span class="pre">35</span></code>.</p>
 <a class="reference internal image-reference" href="../_images/before.png"><img alt="../_images/before.png" src="../_images/before.png" style="width: 200px;" /></a>
 <a class="reference internal image-reference" href="../_images/after.png"><img alt="../_images/after.png" src="../_images/after.png" style="width: 200px;" /></a>
 </section>
