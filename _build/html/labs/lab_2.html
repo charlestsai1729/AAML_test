@@ -303,6 +303,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal-of-this-lab">Goal of this lab</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-quantized-model-10">Run Quantized Model - 10%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simd-mac-instruction-90">SIMD MAC Instruction - 90%</a><ul class="nav section-nav flex-column">
@@ -327,12 +328,22 @@ document.write(`
                   
   <section id="lab-2-quantization-and-simd-mac">
 <h1>Lab 2 : Quantization and SIMD MAC<a class="headerlink" href="#lab-2-quantization-and-simd-mac" title="Link to this heading">#</a></h1>
+<section id="goal-of-this-lab">
+<h2>Goal of this lab<a class="headerlink" href="#goal-of-this-lab" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
+<ul class="simple">
+<li><p><a class="reference internal" href="#run-quantized-model-10"><span class="xref myst">Run Quantized Model - 10%</span></a></p></li>
+<li><p><a class="reference internal" href="#simd-mac-instruction-90"><span class="xref myst">SIMD MAC Instruction - 90%</span></a></p></li>
+</ul>
+</section>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
 <p>In the previous lab, we successfully ran the float32 Keyword Spotting (KWS) model on CFU-Playground. In this lab, we will focus on running a quantized int8 KWS model and leverage the benefits of quantization to achieve acceleration.</p>
 </section>
 <section id="run-quantized-model-10">
 <h2>Run Quantized Model - 10%<a class="headerlink" href="#run-quantized-model-10" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>CFU-Playground/proj
 $<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>&lt;lab1<span class="w"> </span>proj<span class="w"> </span>folder&gt;/*<span class="w"> </span>&lt;lab2<span class="w"> </span>proj<span class="w"> </span>folder&gt;
 $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>&lt;lab2<span class="w"> </span>proj<span class="w"> </span>folder&gt;
@@ -372,6 +383,7 @@ $<span class="w"> </span>make<span class="w"> </span>load
 </section>
 <section id="simd-mac-instruction-90">
 <h2>SIMD MAC Instruction - 90%<a class="headerlink" href="#simd-mac-instruction-90" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
 <section id="accelerate-convolution-70">
 <h3>Accelerate Convolution - 70%<a class="headerlink" href="#accelerate-convolution-70" title="Link to this heading">#</a></h3>
 <div class="admonition hint">
@@ -582,6 +594,7 @@ $<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal-of-this-lab">Goal of this lab</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-quantized-model-10">Run Quantized Model - 10%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simd-mac-instruction-90">SIMD MAC Instruction - 90%</a><ul class="nav section-nav flex-column">

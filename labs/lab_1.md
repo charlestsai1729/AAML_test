@@ -1,11 +1,17 @@
 # Lab 1 : Environment Setup and Profiling a Model
 
-## Introduction
+## Goal of this lab
+---
+- [Setting up the CFU-Playground Environment - 20%](#setting-up-the-cfu-playground-environment-20)
+- [Porting the KWS model - 60%](#porting-the-kws-model-60)
+- [Measuring the MAC cycles and DRAM usage for the KWS model - 20%](#measuring-the-mac-cycles-and-dram-usage-for-the-kws-model-20)
 
+## Introduction
+---
 The CFU Playground is a handy frameworks composed of soft RISC-V SoC and platform for testing custom hardware unit. It abstracts away most of the tedious steps involved in details of building the SoC infrastructure when integrating hardware acceleration unit, allowing us to focus on designing our hardware accelerators and control it by executing some custom instructions.
 
-## Setup the CFU-Playground Environment - 20%
-
+## Setting up the CFU-Playground Environment - 20%
+----
 ### 1. Get the supported board 
 [Nexys A7-100T](https://digilent.com/reference/programmable-logic/nexys-a7/start) is used in this course, contact the TAs if you haven't get one.
 
@@ -44,10 +50,10 @@ Since the full package of Vivado is pretty big, you may check only the `Artix-7`
 
 
 ```{hint}
-After installing Vivado, add the Vivado binary to your PATH, put it in your `.bashrc`, otherwise you will have to add it every time using CFU playground.
+After installing Vivado, add the Vivado binary to your PATH, put it in your `.bashrc` or `.zshrc`, otherwise you will have to add it every time using CFU playground.
 
 ```bash
-export PATH=/home/<your name>/tools/Xilinx/Vivado/<Vivado version>/bin:$PATH
+export PATH=/path/to/tools/Xilinx/Vivado/<Vivado version>/bin:$PATH
 ```
 
 
@@ -61,7 +67,7 @@ Download the August 2020 toolchain from freedom-tools and unpack the binaries to
 $ tar xvfz ~/Downloads/riscv64-unknown-elf-gcc-10.1.0-2020.08.2-x86_64-linux-ubuntu14.tar.gz
 ```
 
-Add the toolchain to your PATH in your .bashrc script:
+Add the toolchain to your PATH in your `.bashrc` or `.zshrc`:
 ``` bash
 export PATH=$PATH:$HOME/riscv64-unknown-elf-gcc-10.1.0-2020.08.2-x86_64-linux-ubuntu14/bin
 ```
@@ -90,16 +96,22 @@ export PATH=$PATH:$HOME/riscv64-unknown-elf-gcc-10.1.0-2020.08.2-x86_64-linux-ub
     ``` bash
     $ make load BUILD_JOBS=4 TTY=/dev/ttyUSB1
     ```
-    - press the “CPU_RESET” button on the board and follow the steps below:
+    now you should observe some output like this:
 
-    ![](https://hackmd.io/_uploads/ryp9xS062.png)
+    ```
+    make[1]: Leaving Directory「/path/to/CFU-Playground/soc」
+    /path/to/CFU-Playground/soc/bin/litex_term --speed 1843200  --kernel /path/to/CFU-Playground/proj/my_first_cfu/build/software.bin /dev/ttyUSB1
+    ```
+
+    - Now press the “CPU_RESET” button on the board and follow the steps below:
+
 
     ![](https://hackmd.io/_uploads/SyXH5fA6n.png)
     ![](https://hackmd.io/_uploads/rJhYcfAa3.png)
 
 
-## Porting KWS model - 60%
-
+## Porting the KWS model - 60%
+-----
 **[Checkout the architecture of the keyword spotting (KWS) model](https://hackmd.io/ou3Ybtx9RkGYopCDtdGLZA?view)**
 
 Since CFU-Playground doesn't have following two audio operators, so we should port them first before we port our KWS model:
@@ -221,7 +233,7 @@ Or refer from the below link for more details.
 Output scores should stored as uint32_t since we can't print floats.
 ```
 
-### 4. Modify files 
+### 7. Modifying the files 
 
 Add codes as below:
 
@@ -258,7 +270,7 @@ The size of kTensorArenaSize will depend on the model you’re using, and may ne
 DEFINES += INCLUDE_MODEL_DS_CNN_STREAM_FE
 #DEFINES += INCLUDE_MODEL_PDTI8
 ```
-### 5. Running the project
+### 8. Running the project
 
 ``` bash
 $ cd CFU-Playground/proj/my_first_cfu
@@ -274,7 +286,7 @@ The model loaded successfully if you get the following output. You may get **20%
 ```
 
 
-Press a number to run a test. 
+Press a number to run a test. ***(takes plenty of minutes)***
 
 <img src="images/lab1/enter_a_number.png" width="400px">
 
@@ -287,9 +299,9 @@ If you get **all** of the following output scores correct, you could get all the
 ```
 
 
-## Measuring how much MAC and DRAM space of KWS model use. - 20%
-
-### Measuring the DRAM space required for a model. - 5%
+## Measuring the MAC cycles and DRAM usage for the KWS model - 20%
+---
+### Measuring the DRAM space required for a model - 5%
 
 #### 1. Modify ```CFU-Playground/common/src/tflite.cc```
 
@@ -302,7 +314,7 @@ printf("DRAM: %d bytes\n", interpreter->arena_used_bytes());
 
 #### 2. Run the project
 
-We got KWS model used 1934292 bytes of the memory space.
+We can observe that KWS model has used 1934292 bytes of the memory space.
 
 ![](https://hackmd.io/_uploads/rkoDnDl02.png)
 

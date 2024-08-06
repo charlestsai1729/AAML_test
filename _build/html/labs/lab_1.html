@@ -304,8 +304,9 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal-of-this-lab">Goal of this lab</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-the-cfu-playground-environment-20">Setup the CFU-Playground Environment - 20%</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-cfu-playground-environment-20">Setting up the CFU-Playground Environment - 20%</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-the-supported-board">1. Get the supported board</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-the-cfu-playground-repository-from-the-github">2. Clone the CFU-Playground Repository from the github</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-setup-script">3. Run the setup script</a></li>
@@ -314,7 +315,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-run">6. Test Run</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#porting-kws-model-60">Porting KWS model - 60%</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#porting-the-kws-model-60">Porting the KWS model - 60%</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#download-the-patch-file">1. Download the patch file</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#put-the-patch-file-in-cfu-playground">2. Put the patch file in CFU-Playground</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modify-proj-proj-mk">3. Modify <code class="docutils literal notranslate"><span class="pre">proj/proj.mk</span></code></a><ul class="nav section-nav flex-column">
@@ -328,17 +329,17 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cfu-playground-common-src-models-ds-cnn-stream-fe-ds-cnn-cc"><code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/models/ds_cnn_stream_fe/ds_cnn.cc</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modify-files">4. Modify files</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-the-files">7. Modifying the files</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cfu-playground-common-src-models-model-c"><code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/models/model.c</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cfu-playground-common-src-tflite-cc"><code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/tflite.cc</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cfu-playground-proj-my-first-cfu-makefile"><code class="docutils literal notranslate"><span class="pre">CFU-Playground/proj/my_first_cfu/Makefile</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-project">5. Running the project</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-project">8. Running the project</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-how-much-mac-and-dram-space-of-kws-model-use-20">Measuring how much MAC and DRAM space of KWS model use. - 20%</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-the-dram-space-required-for-a-model-5">Measuring the DRAM space required for a model. - 5%</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-the-mac-cycles-and-dram-usage-for-the-kws-model-20">Measuring the MAC cycles and DRAM usage for the KWS model - 20%</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-the-dram-space-required-for-a-model-5">Measuring the DRAM space required for a model - 5%</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modify-cfu-playground-common-src-tflite-cc">1. Modify <code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/tflite.cc</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-project">2. Run the project</a></li>
 </ul>
@@ -365,12 +366,23 @@ document.write(`
                   
   <section id="lab-1-environment-setup-and-profiling-a-model">
 <h1>Lab 1 : Environment Setup and Profiling a Model<a class="headerlink" href="#lab-1-environment-setup-and-profiling-a-model" title="Link to this heading">#</a></h1>
+<section id="goal-of-this-lab">
+<h2>Goal of this lab<a class="headerlink" href="#goal-of-this-lab" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
+<ul class="simple">
+<li><p><a class="reference internal" href="#setting-up-the-cfu-playground-environment-20"><span class="xref myst">Setting up the CFU-Playground Environment - 20%</span></a></p></li>
+<li><p><a class="reference internal" href="#porting-the-kws-model-60"><span class="xref myst">Porting the KWS model - 60%</span></a></p></li>
+<li><p><a class="reference internal" href="#measuring-the-mac-cycles-and-dram-usage-for-the-kws-model-20"><span class="xref myst">Measuring the MAC cycles and DRAM usage for the KWS model - 20%</span></a></p></li>
+</ul>
+</section>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
 <p>The CFU Playground is a handy frameworks composed of soft RISC-V SoC and platform for testing custom hardware unit. It abstracts away most of the tedious steps involved in details of building the SoC infrastructure when integrating hardware acceleration unit, allowing us to focus on designing our hardware accelerators and control it by executing some custom instructions.</p>
 </section>
-<section id="setup-the-cfu-playground-environment-20">
-<h2>Setup the CFU-Playground Environment - 20%<a class="headerlink" href="#setup-the-cfu-playground-environment-20" title="Link to this heading">#</a></h2>
+<section id="setting-up-the-cfu-playground-environment-20">
+<h2>Setting up the CFU-Playground Environment - 20%<a class="headerlink" href="#setting-up-the-cfu-playground-environment-20" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
 <section id="get-the-supported-board">
 <h3>1. Get the supported board<a class="headerlink" href="#get-the-supported-board" title="Link to this heading">#</a></h3>
 <p><a class="reference external" href="https://digilent.com/reference/programmable-logic/nexys-a7/start">Nexys A7-100T</a> is used in this course, contact the TAs if you haven’t get one.</p>
@@ -410,8 +422,8 @@ $<span class="w"> </span>./Xilinx_Unified_2020.1_0602_1208_Lin64.bin
 </div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>After installing Vivado, add the Vivado binary to your PATH, put it in your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code>, otherwise you will have to add it every time using CFU playground.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/home/&lt;your<span class="w"> </span>name&gt;/tools/Xilinx/Vivado/&lt;Vivado<span class="w"> </span>version&gt;/bin:<span class="nv">$PATH</span>
+<p>After installing Vivado, add the Vivado binary to your PATH, put it in your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> or <code class="docutils literal notranslate"><span class="pre">.zshrc</span></code>, otherwise you will have to add it every time using CFU playground.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/path/to/tools/Xilinx/Vivado/&lt;Vivado<span class="w"> </span>version&gt;/bin:<span class="nv">$PATH</span>
 </pre></div>
 </div>
 </div>
@@ -423,7 +435,7 @@ $<span class="w"> </span>./Xilinx_Unified_2020.1_0602_1208_Lin64.bin
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>tar<span class="w"> </span>xvfz<span class="w"> </span>~/Downloads/riscv64-unknown-elf-gcc-10.1.0-2020.08.2-x86_64-linux-ubuntu14.tar.gz
 </pre></div>
 </div>
-<p>Add the toolchain to your PATH in your .bashrc script:</p>
+<p>Add the toolchain to your PATH in your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> or <code class="docutils literal notranslate"><span class="pre">.zshrc</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="nv">$HOME</span>/riscv64-unknown-elf-gcc-10.1.0-2020.08.2-x86_64-linux-ubuntu14/bin
 </pre></div>
 </div>
@@ -460,18 +472,23 @@ $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>proj/
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>make<span class="w"> </span>load<span class="w"> </span><span class="nv">BUILD_JOBS</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">TTY</span><span class="o">=</span>/dev/ttyUSB1
 </pre></div>
 </div>
+<p>now you should observe some output like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>make[1]: Leaving Directory「/path/to/CFU-Playground/soc」
+/path/to/CFU-Playground/soc/bin/litex_term --speed 1843200  --kernel /path/to/CFU-Playground/proj/my_first_cfu/build/software.bin /dev/ttyUSB1
+</pre></div>
+</div>
 <ul class="simple">
-<li><p>press the “CPU_RESET” button on the board and follow the steps below:</p></li>
+<li><p>Now press the “CPU_RESET” button on the board and follow the steps below:</p></li>
 </ul>
-<p><img alt="" src="https://hackmd.io/_uploads/ryp9xS062.png" /></p>
 <p><img alt="" src="https://hackmd.io/_uploads/SyXH5fA6n.png" />
 <img alt="" src="https://hackmd.io/_uploads/rJhYcfAa3.png" /></p>
 </li>
 </ol>
 </section>
 </section>
-<section id="porting-kws-model-60">
-<h2>Porting KWS model - 60%<a class="headerlink" href="#porting-kws-model-60" title="Link to this heading">#</a></h2>
+<section id="porting-the-kws-model-60">
+<h2>Porting the KWS model - 60%<a class="headerlink" href="#porting-the-kws-model-60" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
 <p><strong><a class="reference external" href="https://hackmd.io/ou3Ybtx9RkGYopCDtdGLZA?view">Checkout the architecture of the keyword spotting (KWS) model</a></strong></p>
 <p>Since CFU-Playground doesn’t have following two audio operators, so we should port them first before we port our KWS model:</p>
 <ul class="simple">
@@ -597,8 +614,8 @@ $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>ds_cn
 </div>
 </section>
 </section>
-<section id="modify-files">
-<h3>4. Modify files<a class="headerlink" href="#modify-files" title="Link to this heading">#</a></h3>
+<section id="modifying-the-files">
+<h3>7. Modifying the files<a class="headerlink" href="#modifying-the-files" title="Link to this heading">#</a></h3>
 <p>Add codes as below:</p>
 <section id="cfu-playground-common-src-models-model-c">
 <h4><code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/models/model.c</span></code><a class="headerlink" href="#cfu-playground-common-src-models-model-c" title="Link to this heading">#</a></h4>
@@ -636,7 +653,7 @@ $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>ds_cn
 </section>
 </section>
 <section id="running-the-project">
-<h3>5. Running the project<a class="headerlink" href="#running-the-project" title="Link to this heading">#</a></h3>
+<h3>8. Running the project<a class="headerlink" href="#running-the-project" title="Link to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>CFU-Playground/proj/my_first_cfu
 $<span class="w"> </span>make<span class="w"> </span>prog<span class="w"> </span><span class="nv">USEVIVADO</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">TTY</span><span class="o">=</span>/dev/ttyUSB0
 $<span class="w"> </span>make<span class="w"> </span>load<span class="w"> </span><span class="nv">BUILD_JOBS</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">TTY</span><span class="o">=</span>/dev/ttyUSB1
@@ -648,7 +665,7 @@ $<span class="w"> </span>make<span class="w"> </span>load<span class="w"> </span
 <a class="reference internal image-reference" href="https://hackmd.io/_uploads/HyUjALkC3.png"><img alt="https://hackmd.io/_uploads/HyUjALkC3.png" src="https://hackmd.io/_uploads/HyUjALkC3.png" style="width: 550px;" />
 </a>
 </div>
-<p>Press a number to run a test.</p>
+<p>Press a number to run a test. <em><strong>(takes plenty of minutes)</strong></em></p>
 <a class="reference internal image-reference" href="../_images/enter_a_number.png"><img alt="../_images/enter_a_number.png" src="../_images/enter_a_number.png" style="width: 400px;" />
 </a>
 <div class="admonition note">
@@ -659,10 +676,11 @@ $<span class="w"> </span>make<span class="w"> </span>load<span class="w"> </span
 </div>
 </section>
 </section>
-<section id="measuring-how-much-mac-and-dram-space-of-kws-model-use-20">
-<h2>Measuring how much MAC and DRAM space of KWS model use. - 20%<a class="headerlink" href="#measuring-how-much-mac-and-dram-space-of-kws-model-use-20" title="Link to this heading">#</a></h2>
+<section id="measuring-the-mac-cycles-and-dram-usage-for-the-kws-model-20">
+<h2>Measuring the MAC cycles and DRAM usage for the KWS model - 20%<a class="headerlink" href="#measuring-the-mac-cycles-and-dram-usage-for-the-kws-model-20" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
 <section id="measuring-the-dram-space-required-for-a-model-5">
-<h3>Measuring the DRAM space required for a model. - 5%<a class="headerlink" href="#measuring-the-dram-space-required-for-a-model-5" title="Link to this heading">#</a></h3>
+<h3>Measuring the DRAM space required for a model - 5%<a class="headerlink" href="#measuring-the-dram-space-required-for-a-model-5" title="Link to this heading">#</a></h3>
 <section id="modify-cfu-playground-common-src-tflite-cc">
 <h4>1. Modify <code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/tflite.cc</span></code><a class="headerlink" href="#modify-cfu-playground-common-src-tflite-cc" title="Link to this heading">#</a></h4>
 <p>Add codes below:</p>
@@ -673,7 +691,7 @@ $<span class="w"> </span>make<span class="w"> </span>load<span class="w"> </span
 </section>
 <section id="run-the-project">
 <h4>2. Run the project<a class="headerlink" href="#run-the-project" title="Link to this heading">#</a></h4>
-<p>We got KWS model used 1934292 bytes of the memory space.</p>
+<p>We can observe that KWS model has used 1934292 bytes of the memory space.</p>
 <p><img alt="" src="https://hackmd.io/_uploads/rkoDnDl02.png" /></p>
 </section>
 </section>
@@ -793,8 +811,9 @@ $<span class="w"> </span>make<span class="w"> </span>load
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal-of-this-lab">Goal of this lab</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-the-cfu-playground-environment-20">Setup the CFU-Playground Environment - 20%</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-cfu-playground-environment-20">Setting up the CFU-Playground Environment - 20%</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-the-supported-board">1. Get the supported board</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clone-the-cfu-playground-repository-from-the-github">2. Clone the CFU-Playground Repository from the github</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-setup-script">3. Run the setup script</a></li>
@@ -803,7 +822,7 @@ $<span class="w"> </span>make<span class="w"> </span>load
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-run">6. Test Run</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#porting-kws-model-60">Porting KWS model - 60%</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#porting-the-kws-model-60">Porting the KWS model - 60%</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#download-the-patch-file">1. Download the patch file</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#put-the-patch-file-in-cfu-playground">2. Put the patch file in CFU-Playground</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modify-proj-proj-mk">3. Modify <code class="docutils literal notranslate"><span class="pre">proj/proj.mk</span></code></a><ul class="nav section-nav flex-column">
@@ -817,17 +836,17 @@ $<span class="w"> </span>make<span class="w"> </span>load
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cfu-playground-common-src-models-ds-cnn-stream-fe-ds-cnn-cc"><code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/models/ds_cnn_stream_fe/ds_cnn.cc</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modify-files">4. Modify files</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-the-files">7. Modifying the files</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cfu-playground-common-src-models-model-c"><code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/models/model.c</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cfu-playground-common-src-tflite-cc"><code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/tflite.cc</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cfu-playground-proj-my-first-cfu-makefile"><code class="docutils literal notranslate"><span class="pre">CFU-Playground/proj/my_first_cfu/Makefile</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-project">5. Running the project</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-project">8. Running the project</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-how-much-mac-and-dram-space-of-kws-model-use-20">Measuring how much MAC and DRAM space of KWS model use. - 20%</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-the-dram-space-required-for-a-model-5">Measuring the DRAM space required for a model. - 5%</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-the-mac-cycles-and-dram-usage-for-the-kws-model-20">Measuring the MAC cycles and DRAM usage for the KWS model - 20%</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-the-dram-space-required-for-a-model-5">Measuring the DRAM space required for a model - 5%</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modify-cfu-playground-common-src-tflite-cc">1. Modify <code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/tflite.cc</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-project">2. Run the project</a></li>
 </ul>

@@ -5,7 +5,7 @@ Instructor
 **Tsung Tai Yeh**
 
 * Email: ttyeh [at] cs.nycu.edu.tw
-* Location: EC707
+* Location: EC516
 
 Teaching assistants
 *******************

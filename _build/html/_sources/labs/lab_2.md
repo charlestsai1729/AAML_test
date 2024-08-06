@@ -1,11 +1,17 @@
 # Lab 2 : Quantization and SIMD MAC
 
-## Introduction
+## Goal of this lab
+---
+- [Run Quantized Model - 10%](#run-quantized-model-10)
+- [SIMD MAC Instruction - 90%](#simd-mac-instruction-90)
 
+
+## Introduction
+---
 In the previous lab, we successfully ran the float32 Keyword Spotting (KWS) model on CFU-Playground. In this lab, we will focus on running a quantized int8 KWS model and leverage the benefits of quantization to achieve acceleration.
 
 ## Run Quantized Model - 10%
-
+---
 ```sh
 $ cd CFU-Playground/proj
 $ cp -r <lab1 proj folder>/* <lab2 proj folder>
@@ -49,7 +55,7 @@ The quantized fixed-point Convolution utilizes the `conv.h` kernel found in `ten
 ```
 
 ## SIMD MAC Instruction - 90%
-
+---
 ### Accelerate Convolution - 70%
 
 ```{hint}
