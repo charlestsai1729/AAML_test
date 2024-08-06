@@ -4,9 +4,10 @@
 
 The CFU Playground is a handy frameworks composed of soft RISC-V SoC and platform for testing custom hardware unit. It abstracts away most of the tedious steps involved in details of building the SoC infrastructure when integrating hardware acceleration unit, allowing us to focus on designing our hardware accelerators and control it by executing some custom instructions.
 
-## Setup the CFU-Playground Environment -20%
+## Setup the CFU-Playground Environment - 20%
 
-### 1. Get the supported board ([Nexys A7-100T](https://digilent.com/reference/programmable-logic/nexys-a7/start) is used in this course)
+### 1. Get the supported board 
+[Nexys A7-100T](https://digilent.com/reference/programmable-logic/nexys-a7/start) is used in this course, contact the TAs if you haven't get one.
 
 ### 2. Clone the CFU-Playground Repository from the github
 
@@ -24,30 +25,31 @@ $ ./scripts/setup
 ### 4. Install Vivado
 
 - Download Vivado
-Any Vivado version later than `Vivado 2020.1` is fine.
+Any Vivado version later than `2020.1` is fine.
 
 > [Vivado Download page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/archive.html)
 
-
+Make sure you can execute the installation binary before you start.
 ``` bash
 $ chmod +x Xilinx_Unified_2020.1_0602_1208_Lin64.bin
 $ ./Xilinx_Unified_2020.1_0602_1208_Lin64.bin
 ```
 
-
-Since the full package of Vivado is pretty big, you may check only the `Artix-7` option to save disk space and download time!
-
-<img src="images/lab1/vivado_option.png" width="200px">
-
 ```{note}
-:bulb: Note that the Vivado can take up to 8 hours to download, so plan to do that ahead of time.
+Since the full package of Vivado is pretty big, you may check only the `Artix-7` option to save disk space and download time, and please note that the Vivado can take up to 8 hours to download, so plan to do that ahead of time!
+
+<img src="images/lab1/vivado_option.png" width="550px">
+
 ```
 
-- Export PATH for Vivado
-After installing Vivado, add the Vivado binary to your PATH, put it in your `.bashrc` or run it every time you use CFU playground
+
+```{hint}
+After installing Vivado, add the Vivado binary to your PATH, put it in your `.bashrc`, otherwise you will have to add it every time using CFU playground.
+
 ```bash
 export PATH=/home/<your name>/tools/Xilinx/Vivado/<Vivado version>/bin:$PATH
 ```
+
 
 
 ### 5. Install RISC-V toolchain ([Download linux-ubuntu](https://github.com/sifive/freedom-tools/releases/tag/v2020.08.0))
@@ -88,27 +90,25 @@ export PATH=$PATH:$HOME/riscv64-unknown-elf-gcc-10.1.0-2020.08.2-x86_64-linux-ub
     ``` bash
     $ make load BUILD_JOBS=4 TTY=/dev/ttyUSB1
     ```
-    press the “CPU_RESET” button on the board
+    - press the “CPU_RESET” button on the board and follow the steps below:
+
     ![](https://hackmd.io/_uploads/ryp9xS062.png)
 
     ![](https://hackmd.io/_uploads/SyXH5fA6n.png)
     ![](https://hackmd.io/_uploads/rJhYcfAa3.png)
 
----
 
 ## Porting KWS model - 60%
 
-### [See the architecture of the keyword spotting (KWS) model](https://hackmd.io/ou3Ybtx9RkGYopCDtdGLZA?view)
+**[Checkout the architecture of the keyword spotting (KWS) model](https://hackmd.io/ou3Ybtx9RkGYopCDtdGLZA?view)**
 
-## Porting audio operators
-
-CFU-Playground doesn't have following two audio operators, so we should port them first:
+Since CFU-Playground doesn't have following two audio operators, so we should port them first before we port our KWS model:
 - Audio spectrogram
 - Mfcc
 
 ### 1. Download the patch file
 
-[Download kws_tflm_audio_op.patch](https://drive.google.com/drive/u/0/folders/1VJ4hs8SYhn0fRWSNjqPdVUtT-UyMBsds)
+> [Download kws_tflm_audio_op.patch](https://drive.google.com/drive/u/0/folders/1VJ4hs8SYhn0fRWSNjqPdVUtT-UyMBsds)
 
 ### 2. Put the patch file in CFU-Playground
 
@@ -127,9 +127,9 @@ $(COPY) $(TFLM_TP_DIR)/fft2d/fft4g.c $(BUILD_DIR)/src/third_party/fft2d
 ```
 ![](https://hackmd.io/_uploads/rkhRMXRph.png)
 
-## Porting the model
+#### Now we are ready for porting the model!
 
-### 1. Create a folder for KWS model
+### 4. Create a folder for KWS model
 
 ``` bash
 $ cd CFU-Playground/common/src/models/
@@ -137,18 +137,18 @@ $ mkdir ds_cnn_stream_fe
 $ cd ds_cnn_stream_fe
 ```
 
-### 2. Download the tflite file and input files
+### 5. Download the tflite file and input files
 
-[Download ds_cnn_stream_fe.tflite](https://drive.google.com/drive/folders/1psNVso0eMvr7fLztv0Vbeq6U4s5xtmnh?usp=drive_link)
-Put ```ds_cnn_stream_fe.tflite``` in ```CFU-Playground/common/src/models/ds_cnn_stream_fe/```
+> The tflite file  [ds_cnn_stream_fe.tflite](https://drive.google.com/drive/folders/1psNVso0eMvr7fLztv0Vbeq6U4s5xtmnh?usp=drive_link)
 
 
-[Download label.zip](https://drive.google.com/drive/folders/1rY7SDD1qh-EXn8nqex7QDDvqbSiz7Ki_?usp=drive_link)
-Unzip ```label.zip``` in ```CFU-Playground/common/src/models/```
+> The input file [label.zip](https://drive.google.com/drive/folders/1rY7SDD1qh-EXn8nqex7QDDvqbSiz7Ki_?usp=drive_link)
 
-### 3. Create files to run inference on the model
+- Put ```ds_cnn_stream_fe.tflite``` in ```CFU-Playground/common/src/models/ds_cnn_stream_fe/```
 
-[How to run inference using TensorFlow Lite for Microcontrollers](https://www.tensorflow.org/lite/microcontrollers/get_started_low_level#run_inference)
+- Unzip ```label.zip``` in ```CFU-Playground/common/src/models/```
+
+### 6. Create files to run inference on the model
 
 #### ```CFU-Playground/common/src/models/ds_cnn_stream_fe/ds_cnn.h```
 
@@ -173,13 +173,6 @@ void ds_cnn_stream_fe_menu();
 #### ```CFU-Playground/common/src/models/ds_cnn_stream_fe/ds_cnn.cc```
 
 Design the following codes to run inference on the model. You need to use files in ```models/label/``` as your inputs which have already include in the following codes. Then print all 12 output scores.
-
-::: info
-:bulb: You can refer to the codes of other models in ```common/src/models/``` and use the functions in ```common/src/tflite.cc```
-:::
-:::warning
-:warning: Output scores should stored as uint32_t because we can&#39;t print floats.
-:::
 
 ```cpp
 #include "models/ds_cnn_stream_fe/ds_cnn.h"
@@ -217,16 +210,30 @@ void ds_cnn_stream_fe_menu() {
 }
 ```
 
+```{note}
+You can refer to the codes of other models in ```common/src/models/``` and use the functions in ```common/src/tflite.cc```
+
+Or refer from the below link for more details.
+[How to run inference using TensorFlow Lite for Microcontrollers](https://www.tensorflow.org/lite/microcontrollers/get_started_low_level#run_inference)
+```
+
+```{warning}
+Output scores should stored as uint32_t since we can't print floats.
+```
+
 ### 4. Modify files 
 
-Add codes below:
+Add codes as below:
 
 #### ```CFU-Playground/common/src/models/model.c```
 
 ```c
 #include "models/ds_cnn_stream_fe/ds_cnn.h"
-```
-```c
+
+
+/* ... some code ... */
+
+
 #if defined(INCLUDE_MODEL_DS_CNN_STREAM_FE)
         MENU_ITEM(AUTO_INC_CHAR, "Ds cnn stream fe", ds_cnn_stream_fe_menu),
 #endif
@@ -241,9 +248,9 @@ Set the kTensorArenaSize. You should set the &#34;size&#34; below.
     3000 * 1024,
 #endif
 ```
-:::{info}
-:bulb: The size of kTensorArenaSize will depend on the model you’re using, and may need to be determined by experimentation. You should try again and again to get minist value.
-:::
+```{note}
+The size of kTensorArenaSize will depend on the model you’re using, and may need to be determined by experimentation. You should try again and again to get minimal value.
+```
 
 #### ```CFU-Playground/proj/my_first_cfu/Makefile```
 
@@ -251,7 +258,7 @@ Set the kTensorArenaSize. You should set the &#34;size&#34; below.
 DEFINES += INCLUDE_MODEL_DS_CNN_STREAM_FE
 #DEFINES += INCLUDE_MODEL_PDTI8
 ```
-### 5. Run the project
+### 5. Running the project
 
 ``` bash
 $ cd CFU-Playground/proj/my_first_cfu
@@ -259,48 +266,51 @@ $ make prog USEVIVADO=1 TTY=/dev/ttyUSB0
 $ make load BUILD_JOBS=4 TTY=/dev/ttyUSB1
 ``` 
 
-::: info
-:bulb: It&#39;s successful to load a model that you get the following output. Then you could get **20%** points.
-:::
+```{note}
+The model loaded successfully if you get the following output. You may get **20%** points now.
 
-![](https://hackmd.io/_uploads/HyUjALkC3.png)
+<img src="https://hackmd.io/_uploads/HyUjALkC3.png" width="550px">
+
+```
+
 
 Press a number to run a test. 
 
-![](https://hackmd.io/_uploads/BJnzVAua3.png)
+<img src="images/lab1/enter_a_number.png" width="400px">
 
-::: info
-:bulb: If you get **all** of the following output scores correct, you could get all the points of this part which means **60%** points.
-:::
 
-![](https://hackmd.io/_uploads/rkTp0T6C3.png)
+```{note}
+If you get **all** of the following output scores correct, you could get all the points of this part (which means **60%** points).
 
----
 
-# Measuring how much MAC and DRAM space of KWS model use. -20%
+<img src="https://hackmd.io/_uploads/rkTp0T6C3.png" width="700px">
+```
 
-## Measuring the DRAM space required for a model. -5%
 
-### 1. Modify ```CFU-Playground/common/src/tflite.cc```
+## Measuring how much MAC and DRAM space of KWS model use. - 20%
+
+### Measuring the DRAM space required for a model. - 5%
+
+#### 1. Modify ```CFU-Playground/common/src/tflite.cc```
 
 Add codes below:
 
 ```cpp
-printf(&#34;DRAM: %d bytes\n&#34;, interpreter-&gt;arena_used_bytes());
+printf("DRAM: %d bytes\n", interpreter->arena_used_bytes());
 ```
 ![](https://hackmd.io/_uploads/HyFMmBAa2.png)
 
-### 2. Run the project
+#### 2. Run the project
 
 We got KWS model used 1934292 bytes of the memory space.
 
 ![](https://hackmd.io/_uploads/rkoDnDl02.png)
 
-## Measuring the cycles of multiply-and-accumulate(MAC) operation required for a model. -15%
+### Measuring the cycles of multiply-and-accumulate(MAC) operation required for a model. - 15%
 
 We can use the functions in ```CFU-Playground/common/src/perf.h``` to count the cycles of MAC operations.
 
-### 1. Inside your project folder run the following:
+#### 1. Inside your project folder run the following:
 
 ```bash
 $ mkdir -p src/tensorflow/lite/kernels/internal/reference/integer_ops/
@@ -311,7 +321,7 @@ $ cp \
 
 This will create a copy of the convolution source code in your project directory. At build time your copy of the source code will replace the regular implementation.
 
-### 2. Modify ```conv.h```
+#### 2. Modify ```conv.h```
 
 Open the newly created copy at ```proj/my_first_cfu/src/tensorflow/lite/kernels/ internal/reference/conv.h```. Locate the innermost loop of the first function, it should look something like this:
 
@@ -328,10 +338,12 @@ total += (input_value * filter_value);
 Add ``` #include "perf.h"``` at the top of the file and then surround the inner loop with perf functions to count how many cycles this inner loop takes.
 
 ```cpp
-/* ... */
+/* ... some code ... */
+
 #include "perf.h"
 
-/* ... */
+/* ... some code ... */
+
 perf_enable_counter(0);
 for (int in_channel = 0; in_channel < filter_input_depth; ++in_channel) {
   float input_value = input_data[Offset(
@@ -343,18 +355,23 @@ total += (input_value * filter_value);
 perf_disable_counter(0);
 ```
 
-### 5. Run the project
+#### 3. Run the project
 You must make clean first. To enable performance counters you should use the command below.
 
 ```bash
 $ make clean
-$ make prog EXTRA_LITEX_ARGS=&#34;--cpu-variant=perf+cfu&#34;
+$ make prog EXTRA_LITEX_ARGS="--cpu-variant=perf+cfu"
 $ make load
 ```
-<img src="images/lab1/perf.png" width="200px">
+```{note}
+The output shall look something like this, but note that the result is highly related to DRAM, so you may get **different** result everytime.
+
+You will receive all 15 points as long as you measure it correctly.
+
+<img src="images/lab2/perf.png" width="550px">
+```
 
 ---
-
-# Reference
+### Reference
 
 - [CFU-Playground](https://cfu-playground.readthedocs.io/en/latest/index.html)
