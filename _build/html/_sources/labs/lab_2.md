@@ -145,7 +145,7 @@ $ cp \
 ```
 
 Here are some tips for the next steps:
-1. Stronly recommend viewing the entire structure of the .tflite file for this lab. You can visualize the layer graph by uploading it to [Netron](https://netron.app/).
+1. Strongly recommend viewing the entire structure of the .tflite file for this lab. You can visualize the layer graph by uploading it to [Netron](https://netron.app/).
 2. Identify the parameters that will influence your implementation of the custom operation.
 
 ```cpp

@@ -237,7 +237,7 @@ Output scores should stored as uint32_t since we can't print floats.
 
 Add codes as below:
 
-#### ```CFU-Playground/common/src/models/model.c```
+#### ```CFU-Playground/common/src/models/models.c```
 
 ```c
 #include "models/ds_cnn_stream_fe/ds_cnn.h"
@@ -315,6 +315,7 @@ printf("DRAM: %d bytes\n", interpreter->arena_used_bytes());
 #### 2. Run the project
 
 We can observe that KWS model has used 1934292 bytes of the memory space.
+***(or around this amount)***
 
 ![](https://hackmd.io/_uploads/rkoDnDl02.png)
 
@@ -379,8 +380,19 @@ $ make load
 The output shall look something like this, but note that the result is highly related to DRAM, so you may get **different** result everytime.
 
 You will receive all 15 points as long as you measure it correctly.
-
-<img src="images/lab2/perf.png" width="550px">
+    
+     Counter |  Total | Starts | Average |     Raw
+    ---------+--------+--------+---------+--------------
+        0    |  2464M | 2679000|   919   |   2463511289
+        1    |     0  |     0  |   n/a   |            0
+        2    |     0  |     0  |   n/a   |            0
+        3    |     0  |     0  |   n/a   |            0
+        4    |     0  |     0  |   n/a   |            0
+        5    |     0  |     0  |   n/a   |            0
+        6    |     0  |     0  |   n/a   |            0
+        7    |     0  |     0  |   n/a   |            0
+     38970M (  38970422645 )  cycles total
+    
 ```
 
 ---
