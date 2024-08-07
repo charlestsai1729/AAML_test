@@ -92,7 +92,7 @@ After running the simulation each time, you may use your waveform viewer to chec
 
 - At the start of the simulation, testbench will load the global buffer A & B, which assume that CPU or DMA has already prepared the data for TPU in global buffer. When signal `in_valid == 1`, the size of the two matrices will be available for TPU (m, n, k) for ***only one cycle***.
 ```{note}
-For the details of the mapping of matrix into global buffer. Please refer to the Appendix. There are two types of mapping. ***Type A*** for `matrix A`, and ***Type B*** for `matrix B and C`.
+For the details of the mapping of matrix into global buffer. Please refer to the ***[Appendix](#appendix)***. There are two types of mapping. ***Type A*** for `matrix A`, and ***Type B*** for `matrix B and C`.
 ```
 - Testbench will compare your output global buffer with golden, when you finish the calculation, that is `busy == 0`. Then you need to wait for the next `in_valid` for the next test case.
 
@@ -166,5 +166,36 @@ Try to input data and calculate at the same time, otherwise you may exceed 1,500
     1. refer to Basic Lab1
     2. `make verif4`
         - 100 test cases of A(M * K) * B(K * N), where M, K, N ∈ [4, 256)
+
+
+## Appendix
+---
+
+### Memory Mapping - Type A (with transpose)
+
+The matrix A in global buffer A is placed with a transposed style, and other spaces are all 0-padded
+<img src="https://hackmd.io/_uploads/S18IElrj2.png" width="660px">
+
+
+Example of a 10 * 7 matrix
+
+<img src="images/lab3/A_3.png" width="660px">
+
+the memory layout of this matrix looks like (note the transpose in the layout)
+
+<img src="images/lab3/A_4.png" width="150px">
+
+
+### Memory Mapping - Type B (without transpose)
+
+<img src="https://hackmd.io/_uploads/BJYR4gSo3.png" width="660px">
+
+The matrix B looks more forward in memory layout, for example, a 7 * 9 matrix
+
+<img src="images/lab3/B_1.png" width="660px">
+
+looks like this in global buffer B, with 0-padded also
+
+<img src="images/lab3/B_2.png" width="150px">
 
 

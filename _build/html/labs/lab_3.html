@@ -318,6 +318,11 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-exercise-2-20">Basic Exercise #2 - 20%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-exercise-3-30">Basic Exercise #3 - 30%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-exercise-30">Advanced Exercise - 30%</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix">Appendix</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-mapping-type-a-with-transpose">Memory Mapping - Type A (with transpose)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-mapping-type-b-without-transpose">Memory Mapping - Type B (without transpose)</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -514,7 +519,7 @@ gtkwave TPU.vcd
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For the details of the mapping of matrix into global buffer. Please refer to the Appendix. There are two types of mapping. <em><strong>Type A</strong></em> for <code class="docutils literal notranslate"><span class="pre">matrix</span> <span class="pre">A</span></code>, and <em><strong>Type B</strong></em> for <code class="docutils literal notranslate"><span class="pre">matrix</span> <span class="pre">B</span> <span class="pre">and</span> <span class="pre">C</span></code>.</p>
+<p>For the details of the mapping of matrix into global buffer. Please refer to the <em><strong><a class="reference internal" href="#appendix"><span class="xref myst">Appendix</span></a></strong></em>. There are two types of mapping. <em><strong>Type A</strong></em> for <code class="docutils literal notranslate"><span class="pre">matrix</span> <span class="pre">A</span></code>, and <em><strong>Type B</strong></em> for <code class="docutils literal notranslate"><span class="pre">matrix</span> <span class="pre">B</span> <span class="pre">and</span> <span class="pre">C</span></code>.</p>
 </div>
 <ul class="simple">
 <li><p>Testbench will compare your output global buffer with golden, when you finish the calculation, that is <code class="docutils literal notranslate"><span class="pre">busy</span> <span class="pre">==</span> <span class="pre">0</span></code>. Then you need to wait for the next <code class="docutils literal notranslate"><span class="pre">in_valid</span></code> for the next test case.</p></li>
@@ -640,6 +645,32 @@ gtkwave TPU.vcd
 </li>
 </ul>
 </section>
+<section id="appendix">
+<h2>Appendix<a class="headerlink" href="#appendix" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
+<section id="memory-mapping-type-a-with-transpose">
+<h3>Memory Mapping - Type A (with transpose)<a class="headerlink" href="#memory-mapping-type-a-with-transpose" title="Link to this heading">#</a></h3>
+<p>The matrix A in global buffer A is placed with a transposed style, and other spaces are all 0-padded
+<a class="reference internal" href="https://hackmd.io/_uploads/S18IElrj2.png"><img alt="https://hackmd.io/_uploads/S18IElrj2.png" src="https://hackmd.io/_uploads/S18IElrj2.png" style="width: 660px;" /></a></p>
+<p>Example of a 10 * 7 matrix</p>
+<a class="reference internal image-reference" href="../_images/A_3.png"><img alt="../_images/A_3.png" src="../_images/A_3.png" style="width: 660px;" />
+</a>
+<p>the memory layout of this matrix looks like (note the transpose in the layout)</p>
+<a class="reference internal image-reference" href="../_images/A_4.png"><img alt="../_images/A_4.png" src="../_images/A_4.png" style="width: 150px;" />
+</a>
+</section>
+<section id="memory-mapping-type-b-without-transpose">
+<h3>Memory Mapping - Type B (without transpose)<a class="headerlink" href="#memory-mapping-type-b-without-transpose" title="Link to this heading">#</a></h3>
+<a class="reference internal image-reference" href="https://hackmd.io/_uploads/BJYR4gSo3.png"><img alt="https://hackmd.io/_uploads/BJYR4gSo3.png" src="https://hackmd.io/_uploads/BJYR4gSo3.png" style="width: 660px;" />
+</a>
+<p>The matrix B looks more forward in memory layout, for example, a 7 * 9 matrix</p>
+<a class="reference internal image-reference" href="../_images/B_1.png"><img alt="../_images/B_1.png" src="../_images/B_1.png" style="width: 660px;" />
+</a>
+<p>looks like this in global buffer B, with 0-padded also</p>
+<a class="reference internal image-reference" href="../_images/B_2.png"><img alt="../_images/B_2.png" src="../_images/B_2.png" style="width: 150px;" />
+</a>
+</section>
+</section>
 </section>
 
 
@@ -692,6 +723,11 @@ gtkwave TPU.vcd
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-exercise-2-20">Basic Exercise #2 - 20%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-exercise-3-30">Basic Exercise #3 - 30%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-exercise-30">Advanced Exercise - 30%</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix">Appendix</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-mapping-type-a-with-transpose">Memory Mapping - Type A (with transpose)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-mapping-type-b-without-transpose">Memory Mapping - Type B (without transpose)</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
