@@ -1,0 +1,170 @@
+# Lab 3 : Systolic Array
+
+## Goal of this lab
+---
+- [Basic Exercise #1 - 20%](#basic-exercise-1-20)
+- [Basic Exercise #2 - 20%](#basic-exercise-2-20)
+- [Basic Exercise #3 - 30%](#basic-exercise-3-30)
+- [Advanced Exercise - 30%](#advanced-exercise-30)
+
+## Introduction
+---
+The systolic array used by Google Tensor Processing Unit (TPU) accelerates the matrix computation by using the dataflow operation. The systolic array contains multiple processing elements (PEs), each of them is responsible for the multiply–and-accumulate (MAC) operation. It can performs multiple elements in a matrix simultaneously and achieves high computational throughput.
+
+In this lab, we will use Verilog to implement the PE and a small systolic array composed of 4 x 4 PEs. You may refer to different dataflow stationary policy (e.g. weight and output stationary). 
+
+(Hint: The weight stationary is more complicated than output stationary.)
+
+## Systolic Array Implementation
+---
+The goals of this lab are to familiarize you with the concepts of dataflows in systolic array architectures. This will get you hand-on experience with dataflow routing and processing elements implementations. In this lab, you only need to construct the TPU module.
+
+#### Prerequisite
+
+- Python3 with numpy library installed
+- iverilog or ncverilog or vivado
+- nWave or Verdi or GTKWave
+- Makefile
+
+#### Requirements
+
+You need to perform Matrix multiplication with one of dataflow stationary method with correct functional simulation in 4x4 Processing elements(PEs). That is this design can perform (4 * K) * (K * 4) 8-bit integer matrix multiplication.
+
+Your design should be written in the Verilog language. There is no limitation in how you program your design.
+Your PEs shouldn’t more than 4x4, where a 2D systolic array architecture is recommended.
+An 8-bits input data, 32-bits accumulated data design. Please be careful with the bit-width problem.
+(1024 + 256 ∗ 2) KiBytes in total of global buffer size.
+
+#### Getting Started
+
+This lab will require a beginner’s level of verilog.
+```bash
+$ git clone https://github.com/nycu-caslab/AAML2023-Lab3.git
+```
+
+```{note}
+The testbench generates waveform to `TPU.vcd` or `TPU.fsdb` (change it in the `TESTBENCH.v`).
+After running the simulation each time, you may use your waveform viewer to check it out. 
+
+
+    nWave TPU.fsdb
+    or
+    gtkwave TPU.vcd
+```
+
+#### Interface and Block Diagram
+
+**Block Diagram**
+
+<img src="images/lab3/block_diagram-2.png" width="560px">
+
+**Tabel 1: The control signals**
+|  I/O   | Signal name  | Bit width | Description                                |
+|  ----  | ----         | ----      |  ----                                      |     
+| Input  | clk          | 1         | The clock signal                           |
+| Input  | rst_n        | 1         | The reset signal, which is active low      |
+| Input  | in_valid     | 1         | The input is valid when in_valid is high and will only high for one cycle |
+| Input  | K            | 8         | dimension K of the matrix (M,K), (K,N) |
+| Input  | M            | 8         | dimension M of the matrix (M,K), (K,N) |
+| Input  | N            | 8         | dimension N of the matrix (M,K), (K,N) |
+| Output | busy         | 1         | High when the design is busy. Pattern will check your answer when busy is low after every in_valid. |
+
+**Tabel 2: The SRAM interface of A and B SRAM**
+|  I/O   | Signal name  | Bit width | Description                                  |
+|  ----  | ----         | ----      |  ----                                        |     
+| Input  | wr_en        | 1         | The write enable signal.                     |
+| Input  | index        | 16        | The address of the sram to be read or write. |
+| Input  | data_in      | 32        | The data input to write to the SRAM          |
+| Output | data_out     | 32        | The data output from the SRAM                |
+
+**Tabel 3: The SRAM interface of C SRAM**
+|  I/O   | Signal name  | Bit width | Description                                  |
+|  ----  | ----         | ----      |  ----                                        |     
+| Input  | wr_en        | 1         | The write enable signal.                     |
+| Input  | index        | 16        | The address of the sram to be read or write. |
+| Input  | data_in      | 128       | The data input to write to the SRAM          |
+| Output | data_out     | 128       | The data output from the SRAM                |
+
+
+#### Rules
+
+- Your TPU design (`TPU.v`) should be under the top module which provided by TA.
+
+- At the start of the simulation, testbench will load the global buffer A & B, which assume that CPU or DMA has already prepared the data for TPU in global buffer. When signal `in_valid == 1`, the size of the two matrices will be available for TPU (m, n, k) for ***only one cycle***.
+```{note}
+For the details of the mapping of matrix into global buffer. Please refer to the Appendix. There are two types of mapping. ***Type A*** for `matrix A`, and ***Type B*** for `matrix B and C`.
+```
+- Testbench will compare your output global buffer with golden, when you finish the calculation, that is `busy == 0`. Then you need to wait for the next `in_valid` for the next test case.
+
+- You should implement your own data loader, process elements(PEs), and controller which schedule the data in global buffer A & B to be calculated in the systolic array.
+
+- You need to set `busy` to high ***immediately*** after `in_valid` fall from high to low.
+
+- Use asynchronous reset active low architecture.
+
+- The execution latency is limited in ***1,500,000*** cycles.
+
+```{note}
+Try to input data and calculate at the same time, otherwise you may exceed 1,500,000 cycles.
+```
+
+## Basic Exercise #1 - 20%
+---
+- Input data:
+    - A matrix and B matrix which size are constrainted to 2 * 2
+    - control signal (refer to details in table 1, 2, 3)
+
+- Required Output:
+    - the 2*2 C matrix of A matrix * B matrix
+
+- Steps:
+    1. Take data from global buffer
+    2. Use the data from global buffer to calculate with PEs
+    3. Output the result to C global buffer
+    4. `make verif1`
+        - 10 test cases of A(2 * 2) * B(2 * 2)
+    5. The bench will tell if you did it correctly
+
+## Basic Exercise #2 - 20%
+---
+- Input data:
+    - A matrix and B matrix which size are constrainted to 4 * 4
+    - control signal (refer to details in table 1, 2, 3)
+
+- Required Output:
+    - the 4 * 4 C matrix of A matrix * B matrix
+
+- Steps:
+    1. refer to Basic Lab1
+    2. `make verif2`
+        - 10 test cases of A(4 * 4) * B(4 * 4)
+
+## Basic Exercise #3 - 30%
+---
+- Input data:
+    - A matrix and B matrix which size are 4 * K and K * 4 separately
+    - control signal (refer to details in table 1, 2, 3)
+
+- Required Output:
+    - the 4 * 4 C matrix of A matrix * B matrix
+
+- Steps:
+    1. refer to Basic Lab1
+    2. `make verif3`
+        - 10 test cases of A(4 * K) * B(K * 4)
+
+## Advanced Exercise - 30%
+---
+- Input data:
+    - A matrix and B matrix which size are M * K and K * N separately
+    - control signal (refer to details in table 1, 2, 3)
+
+- Required Output:
+    - the (M * N) C matrix of A matrix * B matrix
+
+- Steps:
+    1. refer to Basic Lab1
+    2. `make verif4`
+        - 100 test cases of A(M * K) * B(K * N), where M, K, N ∈ [4, 256)
+
+
