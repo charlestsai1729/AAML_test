@@ -167,4 +167,53 @@ Given the symmetry of the Logistic function, it's only necessary to consider eit
 ```
 
 #### Hardware
-As for the hardware unit section, 
+As for the hardware unit section, you should first familiarize yourself with the CFU handshake signals.
+> [Details and Use Cases of the CPU <-> CFU interface](https://cfu-playground.readthedocs.io/en/latest/interface.html)
+
+Here is a dummy example:
+```verilog
+assign cmd_ready = ~rsp_valid & ~calculating;
+always @(posedge clk) begin
+    if (reset) begin
+        ...
+    end else if (rsp_valid) begin
+        rsp_valid <= ~rsp_ready;
+    end else if (cmd_valid) begin
+        if (...) begin
+            ...
+            input_valid <= 1;
+            calculating <= 1;
+        end
+        ...
+    end
+    else if (input_valid) begin
+        input_valid <= 0;
+    end
+    else if (finish == 1) begin
+        calculating <= 0;
+        rsp_valid <= 1'b1;
+        rsp_payload_outputs_0 <= result;
+    end
+end
+```
+
+For calculating results using hardware, you have the option to employ either a **Lookup Table** or Mathematical Approximation methods, such as the **Taylor Series**, **Newton-Raphson division**, or **Polynomial Approximation**.
+
+In this lab, for the **exponential function, we recommend using either a Lookup Table or the Taylor Series**. For the **reciprocal function, we suggest using a Lookup Table or the Newton-Raphson division method**, similar to the approach used in one_over_one_plus_x_for_x_in_0_1(), but implemented in hardware.
+
+## Accelerating the Softmax Function - 60%
+`tensorflow/lite/kernels/internal/reference/softmax.h`
+
+\begin{gather*}
+\text{softmax}(x) = 
+\end{gather*}
+
+Add the integer version of the Softmax function to your project.
+
+````{important}
+Add the **fifth perf counter** at the beginning and end of the **second** Softmax function within the `softmax.h` file in your project. **This step is crucial for evaluating your score, so please ensure it is not overlooked.**
+
+```cpp
+
+```
+````

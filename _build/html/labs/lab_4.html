@@ -322,6 +322,7 @@ document.write(`
 </li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accelerating-the-softmax-function-60">Accelerating the Softmax Function - 60%</a></li>
 </ul>
             </nav>
         </div>
@@ -501,9 +502,56 @@ document.write(`
 </section>
 <section id="hardware">
 <h4>Hardware<a class="headerlink" href="#hardware" title="Link to this heading">#</a></h4>
-<p>As for the hardware unit section,</p>
+<p>As for the hardware unit section, you should first familiarize yourself with the CFU handshake signals.</p>
+<blockquote>
+<div><p><a class="reference external" href="https://cfu-playground.readthedocs.io/en/latest/interface.html">Details and Use Cases of the CPU &lt;-&gt; CFU interface</a></p>
+</div></blockquote>
+<p>Here is a dummy example:</p>
+<div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="k">assign</span><span class="w"> </span><span class="n">cmd_ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">rsp_valid</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">~</span><span class="n">calculating</span><span class="p">;</span>
+<span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reset</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rsp_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">rsp_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="o">~</span><span class="n">rsp_ready</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cmd_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">            </span><span class="p">...</span>
+<span class="w">            </span><span class="n">input_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">calculating</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="p">;</span>
+<span class="w">        </span><span class="k">end</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">input_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">finish</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">1</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">calculating</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span>
+<span class="w">        </span><span class="n">rsp_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">rsp_payload_outputs_0</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>For calculating results using hardware, you have the option to employ either a <strong>Lookup Table</strong> or Mathematical Approximation methods, such as the <strong>Taylor Series</strong>, <strong>Newton-Raphson division</strong>, or <strong>Polynomial Approximation</strong>.</p>
+<p>In this lab, for the <strong>exponential function, we recommend using either a Lookup Table or the Taylor Series</strong>. For the <strong>reciprocal function, we suggest using a Lookup Table or the Newton-Raphson division method</strong>, similar to the approach used in one_over_one_plus_x_for_x_in_0_1(), but implemented in hardware.</p>
 </section>
 </section>
+</section>
+<section id="accelerating-the-softmax-function-60">
+<h2>Accelerating the Softmax Function - 60%<a class="headerlink" href="#accelerating-the-softmax-function-60" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">tensorflow/lite/kernels/internal/reference/softmax.h</span></code></p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{gather*}
+\text{softmax}(x) = 
+\end{gather*}\]</div>
+<p>Add the integer version of the Softmax function to your project.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Add the <strong>fifth perf counter</strong> at the beginning and end of the <strong>second</strong> Softmax function within the <code class="docutils literal notranslate"><span class="pre">softmax.h</span></code> file in your project. <strong>This step is crucial for evaluating your score, so please ensure it is not overlooked.</strong></p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
 </section>
 </section>
 
@@ -559,6 +607,7 @@ document.write(`
 </li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accelerating-the-softmax-function-60">Accelerating the Softmax Function - 60%</a></li>
 </ul>
   </nav></div>
 
