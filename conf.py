@@ -30,7 +30,8 @@ extensions = ['myst_parser']
 
 myst_enable_extensions = [
     "colon_fence",
-    "html_image"
+    "html_image",
+    "amsmath"
 ]
 
 # Add any paths that contain templates here, relative to this directory.

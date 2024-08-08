@@ -43,6 +43,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'labs/lab_3';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lab 4 : Elementwise Unit" href="lab_4.html" />
     <link rel="prev" title="Lab 2 : Quantization and SIMD MAC" href="lab_2.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -156,6 +157,7 @@
 <li class="toctree-l1"><a class="reference internal" href="lab_1.html">Lab 1 : Environment Setup and Profiling a Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lab_2.html">Lab 2 : Quantization and SIMD MAC</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Lab 3 : Systolic Array</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab_4.html">Lab 4 : Elementwise Unit</a></li>
 </ul>
 
     </div>
@@ -394,8 +396,7 @@ gtkwave TPU.vcd
 <section id="interface-and-block-diagram">
 <h3>Interface and Block Diagram<a class="headerlink" href="#interface-and-block-diagram" title="Link to this heading">#</a></h3>
 <p><strong>Block Diagram</strong></p>
-<a class="reference internal image-reference" href="../_images/block_diagram-2.png"><img alt="../_images/block_diagram-2.png" src="../_images/block_diagram-2.png" style="width: 560px;" />
-</a>
+<a class="reference internal image-reference" href="../_images/block_diagram-2.png"><img alt="../_images/block_diagram-2.png" src="../_images/block_diagram-2.png" style="width: 560px;" /></a>
 <p><strong>Tabel 1: The control signals</strong></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -653,22 +654,17 @@ gtkwave TPU.vcd
 <p>The matrix A in global buffer A is placed with a transposed style, and other spaces are all 0-padded
 <a class="reference internal" href="https://hackmd.io/_uploads/S18IElrj2.png"><img alt="https://hackmd.io/_uploads/S18IElrj2.png" src="https://hackmd.io/_uploads/S18IElrj2.png" style="width: 660px;" /></a></p>
 <p>Example of a 10 * 7 matrix</p>
-<a class="reference internal image-reference" href="../_images/A_3.png"><img alt="../_images/A_3.png" src="../_images/A_3.png" style="width: 660px;" />
-</a>
+<a class="reference internal image-reference" href="../_images/A_3.png"><img alt="../_images/A_3.png" src="../_images/A_3.png" style="width: 660px;" /></a>
 <p>the memory layout of this matrix looks like (note the transpose in the layout)</p>
-<a class="reference internal image-reference" href="../_images/A_4.png"><img alt="../_images/A_4.png" src="../_images/A_4.png" style="width: 150px;" />
-</a>
+<a class="reference internal image-reference" href="../_images/A_4.png"><img alt="../_images/A_4.png" src="../_images/A_4.png" style="width: 150px;" /></a>
 </section>
 <section id="memory-mapping-type-b-without-transpose">
 <h3>Memory Mapping - Type B (without transpose)<a class="headerlink" href="#memory-mapping-type-b-without-transpose" title="Link to this heading">#</a></h3>
-<a class="reference internal image-reference" href="https://hackmd.io/_uploads/BJYR4gSo3.png"><img alt="https://hackmd.io/_uploads/BJYR4gSo3.png" src="https://hackmd.io/_uploads/BJYR4gSo3.png" style="width: 660px;" />
-</a>
+<a class="reference internal image-reference" href="https://hackmd.io/_uploads/BJYR4gSo3.png"><img alt="https://hackmd.io/_uploads/BJYR4gSo3.png" src="https://hackmd.io/_uploads/BJYR4gSo3.png" style="width: 660px;" /></a>
 <p>The matrix B looks more forward in memory layout, for example, a 7 * 9 matrix</p>
-<a class="reference internal image-reference" href="../_images/B_1.png"><img alt="../_images/B_1.png" src="../_images/B_1.png" style="width: 660px;" />
-</a>
+<a class="reference internal image-reference" href="../_images/B_1.png"><img alt="../_images/B_1.png" src="../_images/B_1.png" style="width: 660px;" /></a>
 <p>looks like this in global buffer B, with 0-padded also</p>
-<a class="reference internal image-reference" href="../_images/B_2.png"><img alt="../_images/B_2.png" src="../_images/B_2.png" style="width: 150px;" />
-</a>
+<a class="reference internal image-reference" href="../_images/B_2.png"><img alt="../_images/B_2.png" src="../_images/B_2.png" style="width: 150px;" /></a>
 </section>
 </section>
 </section>
@@ -692,6 +688,15 @@ gtkwave TPU.vcd
         <p class="prev-next-subtitle">previous</p>
         <p class="prev-next-title">Lab 2 : Quantization and SIMD MAC</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="lab_4.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lab 4 : Elementwise Unit</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>

@@ -157,6 +157,7 @@
 <li class="toctree-l1"><a class="reference internal" href="lab_1.html">Lab 1 : Environment Setup and Profiling a Model</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Lab 2 : Quantization and SIMD MAC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lab_3.html">Lab 3 : Systolic Array</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab_4.html">Lab 4 : Elementwise Unit</a></li>
 </ul>
 
     </div>
@@ -307,7 +308,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal-of-this-lab">Goal of this lab</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-quantized-model-10">Run Quantized Model - 10%</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-quantized-model-10">Running Quantized Model - 10%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simd-mac-instruction-90">SIMD MAC Instruction - 90%</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accelerate-convolution-70">Accelerate Convolution - 70%</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cfu-v">cfu.v</a></li>
@@ -334,7 +335,7 @@ document.write(`
 <h2>Goal of this lab<a class="headerlink" href="#goal-of-this-lab" title="Link to this heading">#</a></h2>
 <hr class="docutils" />
 <ul class="simple">
-<li><p><a class="reference internal" href="#run-quantized-model-10"><span class="xref myst">Run Quantized Model - 10%</span></a></p></li>
+<li><p><a class="reference internal" href="#running-quantized-model---10"><span class="xref myst">Running Quantized Model - 10%</span></a></p></li>
 <li><p><a class="reference internal" href="#simd-mac-instruction-90"><span class="xref myst">SIMD MAC Instruction - 90%</span></a></p></li>
 </ul>
 </section>
@@ -343,8 +344,8 @@ document.write(`
 <hr class="docutils" />
 <p>In the previous lab, we successfully ran the float32 Keyword Spotting (KWS) model on CFU-Playground. In this lab, we will focus on running a quantized int8 KWS model and leverage the benefits of quantization to achieve acceleration.</p>
 </section>
-<section id="run-quantized-model-10">
-<h2>Run Quantized Model - 10%<a class="headerlink" href="#run-quantized-model-10" title="Link to this heading">#</a></h2>
+<section id="running-quantized-model-10">
+<h2>Running Quantized Model - 10%<a class="headerlink" href="#running-quantized-model-10" title="Link to this heading">#</a></h2>
 <hr class="docutils" />
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>CFU-Playground/proj
 $<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>&lt;lab1<span class="w"> </span>proj<span class="w"> </span>folder&gt;/*<span class="w"> </span>&lt;lab2<span class="w"> </span>proj<span class="w"> </span>folder&gt;
@@ -538,8 +539,7 @@ $<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
 </pre></div>
 </div>
 <p>The SIMD MAC implementation on the Convolution should achieve at least a 10x speedup compared to the KWS model composed of FP32 and executed in a serial manner. The prediction on labels should also be correct.</p>
-<a class="reference internal image-reference" href="../_images/conv_result.png"><img alt="../_images/conv_result.png" src="../_images/conv_result.png" style="width: 300px;" />
-</a>
+<a class="reference internal image-reference" href="../_images/conv_result.png"><img alt="../_images/conv_result.png" src="../_images/conv_result.png" style="width: 300px;" /></a>
 <p>To get full score, the cycles of inferencing the quantized model should not beyond 2500M, and the prediction of all 5 labels should be correct.</p>
 </section>
 </section>
@@ -552,10 +552,8 @@ $<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
 </pre></div>
 </div>
 <p>The model uses per-channel fully connected layer; therefore, the function you need to modify is the third one in <code class="docutils literal notranslate"><span class="pre">fully_connected.h</span></code>. After implementing acceleration, the execution <code class="docutils literal notranslate"><span class="pre">ticks</span></code> of your function should be <code class="docutils literal notranslate"><span class="pre">fewer</span> <span class="pre">than</span> <span class="pre">35</span></code>.</p>
-<a class="reference internal image-reference" href="../_images/before.png"><img alt="../_images/before.png" src="../_images/before.png" style="width: 200px;" />
-</a>
-<a class="reference internal image-reference" href="../_images/after.png"><img alt="../_images/after.png" src="../_images/after.png" style="width: 200px;" />
-</a>
+<a class="reference internal image-reference" href="../_images/before.png"><img alt="../_images/before.png" src="../_images/before.png" style="width: 200px;" /></a>
+<a class="reference internal image-reference" href="../_images/after.png"><img alt="../_images/after.png" src="../_images/after.png" style="width: 200px;" /></a>
 </section>
 </section>
 </section>
@@ -607,7 +605,7 @@ $<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal-of-this-lab">Goal of this lab</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-quantized-model-10">Run Quantized Model - 10%</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-quantized-model-10">Running Quantized Model - 10%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simd-mac-instruction-90">SIMD MAC Instruction - 90%</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accelerate-convolution-70">Accelerate Convolution - 70%</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cfu-v">cfu.v</a></li>
