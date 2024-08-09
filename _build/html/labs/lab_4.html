@@ -322,7 +322,11 @@ document.write(`
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accelerating-the-softmax-function-60">Accelerating the Softmax Function - 60%</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accelerating-the-softmax-function-20">Accelerating the Softmax Function - 20%</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Evaluation Criteria</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Guide</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -340,9 +344,9 @@ document.write(`
 <h2>Goal of this lab<a class="headerlink" href="#goal-of-this-lab" title="Link to this heading">#</a></h2>
 <hr class="docutils" />
 <ul class="simple">
-<li><p><a class="reference internal" href="#porting-and-profiling-the-models---20"><span class="xref myst">Porting and Profiling the Models - 20%</span></a></p></li>
-<li><p><a class="reference internal" href="#accelerating-the-logistic-function---60"><span class="xref myst">Accelerating the Logistic Function - 60%</span></a></p></li>
-<li><p><a class="reference internal" href="#"><span class="xref myst">Accelerating the Softmax Function - 20%</span></a></p></li>
+<li><p><a class="reference internal" href="#porting-and-profiling-the-models-20"><span class="xref myst">Porting and Profiling the Models - 20%</span></a></p></li>
+<li><p><a class="reference internal" href="#accelerating-the-logistic-function-60"><span class="xref myst">Accelerating the Logistic Function - 60%</span></a></p></li>
+<li><p><a class="reference internal" href="#accelerating-the-softmax-function-20"><span class="xref myst">Accelerating the Softmax Function - 20%</span></a></p></li>
 </ul>
 </section>
 <section id="introduction">
@@ -365,15 +369,23 @@ document.write(`
 </li>
 </ol>
 <blockquote>
-<div><p><a class="reference internal" href="#"><span class="xref myst">model download link</span></a></p>
+<div><p><a class="reference external" href="https://drive.google.com/file/d/1_aUHWVC8kYe3A0T-A1ACcONjoYsGji_F/view?usp=sharing">model download link</a></p>
 </div></blockquote>
 <p>After downloading and unzipping the files, place the two model folders directly into the <code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/models</span></code> directory.</p>
 <p>Just like we did in lab 1, we should modify some files to add the new models:</p>
-<p><code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/models/models.c</span></code></p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(INCLUDE_MODEL_DS_CNN_STREAM_FE)</span>
+<p><code class="docutils literal notranslate"><span class="pre">CFU-Playground/common/src/models/models.c</span></code><br />
+(You can also directly use the <code class="docutils literal notranslate"><span class="pre">models.c</span></code> file provided in the .zip archive.)</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;models/ds_cnn_stream_fe/ds_cnn.h&quot;</span>
+<span class="c1">// add codes below</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;models/mobileViT_xxs/mobileViT.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;models/logistic_test/logistic_test.h&quot;</span>
+
+<span class="p">...</span>
+
+<span class="cp">#if defined(INCLUDE_MODEL_DS_CNN_STREAM_FE)</span>
 <span class="w">        </span><span class="n">MENU_ITEM</span><span class="p">(</span><span class="n">AUTO_INC_CHAR</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Ds cnn stream fe&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ds_cnn_stream_fe_menu</span><span class="p">),</span>
 <span class="cp">#endif</span>
-<span class="c1">// add cods below</span>
+<span class="c1">// add codes below</span>
 <span class="cp">#if defined(INCLUDE_MODEL_MOBILE_VIT_XXS)</span>
 <span class="w">        </span><span class="n">MENU_ITEM</span><span class="p">(</span><span class="n">AUTO_INC_CHAR</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;MobileViT xxs&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mobileViT_xxs_menu</span><span class="p">),</span>
 <span class="cp">#endif</span>
@@ -410,7 +422,7 @@ document.write(`
 <h3>Profiling the MobileViT - 10%<a class="headerlink" href="#profiling-the-mobilevit-10" title="Link to this heading">#</a></h3>
 <p>After executing the MobileViT model, you may notice that the inference process is quite slow. Please <strong>analyze and compare the time consumed by each operation</strong>, with particular attention to the <strong>activation functions</strong>. You may present your analysis in any format, such as <strong>a table or a pie chart</strong>. Additionally, you have the option to use data with or without SIMD MAC acceleration.</p>
 <p>Here is an example of a pie chart:<br />
-<a class="reference internal" href="../_images/pie_example.png"><img alt="../_images/pie_example.png" src="../_images/pie_example.png" style="width: 1000px;" /></a></p>
+<a class="reference internal" href="../_images/pie_example.png"><img alt="../_images/pie_example.png" src="../_images/pie_example.png" style="width: 600px;" /></a></p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>You can use either the perf counter or the ticks displayed in the results after execution as your data source.<br />
@@ -441,7 +453,7 @@ document.write(`
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Add the <strong>sixth perf counter</strong> at the beginning and end of the topmost Logistic function within the <code class="docutils literal notranslate"><span class="pre">logistic.h</span></code> file in your project. <strong>This step is crucial for evaluating your score, so please ensure it is not overlooked.</strong></p>
+<p>Add the <strong>sixth perf counter</strong> at the beginning and end of the <strong>topmost</strong> Logistic function within the <code class="docutils literal notranslate"><span class="pre">logistic.h</span></code> file in your project. This step is crucial for evaluating your score, so please ensure it is not overlooked.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Logistic</span><span class="p">(</span><span class="kt">int32_t</span><span class="w"> </span><span class="n">input_zero_point</span><span class="p">,</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">input_range_radius</span><span class="p">,</span>
 <span class="w">                     </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">input_multiplier</span><span class="p">,</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">input_left_shift</span><span class="p">,</span>
 <span class="w">                     </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">input_size</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int8_t</span><span class="o">*</span><span class="w"> </span><span class="n">input_data</span><span class="p">,</span>
@@ -463,6 +475,10 @@ document.write(`
 <p>You will get <strong>0%</strong> if you can’t pass the golden test of the Logistic Test Model.</p>
 </div>
 <p>TBD</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>You may need to accelerate both the exponential and reciprocal parts in order to meet the full score cycle count criteria.</p>
+</div>
 </section>
 <section id="guide">
 <h3>Guide<a class="headerlink" href="#guide" title="Link to this heading">#</a></h3>
@@ -532,26 +548,50 @@ document.write(`
 <span class="k">end</span>
 </pre></div>
 </div>
-<p>For calculating results using hardware, you have the option to employ either a <strong>Lookup Table</strong> or Mathematical Approximation methods, such as the <strong>Taylor Series</strong>, <strong>Newton-Raphson division</strong>, or <strong>Polynomial Approximation</strong>.</p>
+<p>For calculating results using hardware, you have the option to employ either a Lookup Table or Mathematical Approximation methods, such as the Taylor Series, Newton-Raphson division, or Polynomial Approximation.</p>
 <p>In this lab, for the <strong>exponential function, we recommend using either a Lookup Table or the Taylor Series</strong>. For the <strong>reciprocal function, we suggest using a Lookup Table or the Newton-Raphson division method</strong>, similar to the approach used in one_over_one_plus_x_for_x_in_0_1(), but implemented in hardware.</p>
 </section>
 </section>
 </section>
-<section id="accelerating-the-softmax-function-60">
-<h2>Accelerating the Softmax Function - 60%<a class="headerlink" href="#accelerating-the-softmax-function-60" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">tensorflow/lite/kernels/internal/reference/softmax.h</span></code></p>
+<section id="accelerating-the-softmax-function-20">
+<h2>Accelerating the Softmax Function - 20%<a class="headerlink" href="#accelerating-the-softmax-function-20" title="Link to this heading">#</a></h2>
 <div class="amsmath math notranslate nohighlight">
 \[\begin{gather*}
-\text{softmax}(x) = 
+\text{softmax}(x_i) = \frac{e^{x_{i}}}{\sum_{j=1}^n e^{x_{j}}}
 \end{gather*}\]</div>
-<p>Add the integer version of the Softmax function to your project.</p>
+<p>Add the Softmax function to your project.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>../../third_party/tflite-micro/tensorflow/lite/kernels/internal/reference/softmax.h<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>src/tensorflow/lite/kernels/internal/reference/softmax.h
+</pre></div>
+</div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Add the <strong>fifth perf counter</strong> at the beginning and end of the <strong>second</strong> Softmax function within the <code class="docutils literal notranslate"><span class="pre">softmax.h</span></code> file in your project. <strong>This step is crucial for evaluating your score, so please ensure it is not overlooked.</strong></p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>
+<p>Add the <strong>fifth perf counter</strong> at the beginning and end of the <strong>second</strong> Softmax function within the <code class="docutils literal notranslate"><span class="pre">softmax.h</span></code> file in your project. This step is crucial for evaluating your score, so please ensure it is not overlooked.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Quantized softmax with int8_t/uint8_t input and int8_t/uint8_t/int16_t</span>
+<span class="c1">// output.</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">InputT</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">OutputT</span><span class="o">&gt;</span>
+<span class="kr">inline</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Softmax</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">SoftmaxParams</span><span class="o">&amp;</span><span class="w"> </span><span class="n">params</span><span class="p">,</span>
+<span class="w">                    </span><span class="k">const</span><span class="w"> </span><span class="n">RuntimeShape</span><span class="o">&amp;</span><span class="w"> </span><span class="n">input_shape</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">InputT</span><span class="o">*</span><span class="w"> </span><span class="n">input_data</span><span class="p">,</span>
+<span class="w">                    </span><span class="k">const</span><span class="w"> </span><span class="n">RuntimeShape</span><span class="o">&amp;</span><span class="w"> </span><span class="n">output_shape</span><span class="p">,</span><span class="w"> </span><span class="n">OutputT</span><span class="o">*</span><span class="w"> </span><span class="n">output_data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">perf_enable_counter</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="p">...</span>
+
+<span class="w">  </span><span class="n">perf_disable_counter</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
+<section id="id1">
+<h3>Evaluation Criteria<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>TBD</p>
+</section>
+<section id="id2">
+<h3>Guide<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>Following the previous approach, replacing the exponential and reciprocal functions with CFU operations is a good idea. The CFU operations designed for the Logistic function might work here too.</p>
+<p>But, be careful: the fixed-point integer bits used for the exponential function are different in the Logistic and Softmax functions—<strong>the Logistic uses 4 and the Softmax uses 5</strong>. Pay close attention to this detail.</p>
+</section>
 </section>
 </section>
 
@@ -607,7 +647,11 @@ document.write(`
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accelerating-the-softmax-function-60">Accelerating the Softmax Function - 60%</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accelerating-the-softmax-function-20">Accelerating the Softmax Function - 20%</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Evaluation Criteria</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Guide</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

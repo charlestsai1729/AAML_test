@@ -2,9 +2,9 @@
 
 ## Goal of this lab
 ---
-- [Porting and Profiling the Models - 20%](#porting-and-profiling-the-models---20)
-- [Accelerating the Logistic Function - 60%](#accelerating-the-logistic-function---60)
-- [Accelerating the Softmax Function - 20%]()
+- [Porting and Profiling the Models - 20%](#porting-and-profiling-the-models-20)
+- [Accelerating the Logistic Function - 60%](#accelerating-the-logistic-function-60)
+- [Accelerating the Softmax Function - 20%](#accelerating-the-softmax-function-20)
 
 ## Introduction
 ---
@@ -24,18 +24,26 @@ In this lab, we will provide you two models:
 
     This is the actual model we aim to accelerate. We will use this model to benchmark the performance of your design.
 
-> [model download link]()
+> [model download link](https://drive.google.com/file/d/1_aUHWVC8kYe3A0T-A1ACcONjoYsGji_F/view?usp=sharing)
 
 After downloading and unzipping the files, place the two model folders directly into the `CFU-Playground/common/src/models` directory.
 
 Just like we did in lab 1, we should modify some files to add the new models: 
 
-`CFU-Playground/common/src/models/models.c`
+`CFU-Playground/common/src/models/models.c`  
+(You can also directly use the `models.c` file provided in the .zip archive.)  
 ```c
+#include "models/ds_cnn_stream_fe/ds_cnn.h"
+// add codes below
+#include "models/mobileViT_xxs/mobileViT.h"
+#include "models/logistic_test/logistic_test.h"
+
+...
+
 #if defined(INCLUDE_MODEL_DS_CNN_STREAM_FE)
         MENU_ITEM(AUTO_INC_CHAR, "Ds cnn stream fe", ds_cnn_stream_fe_menu),
 #endif
-// add cods below
+// add codes below
 #if defined(INCLUDE_MODEL_MOBILE_VIT_XXS)
         MENU_ITEM(AUTO_INC_CHAR, "MobileViT xxs", mobileViT_xxs_menu),
 #endif
@@ -74,7 +82,7 @@ After completing these steps, you should be able to run the two new models and o
 After executing the MobileViT model, you may notice that the inference process is quite slow. Please **analyze and compare the time consumed by each operation**, with particular attention to the **activation functions**. You may present your analysis in any format, such as **a table or a pie chart**. Additionally, you have the option to use data with or without SIMD MAC acceleration.
 
 Here is an example of a pie chart:  
-<img src="images/lab4/pie_example.png" width="1000px">
+<img src="images/lab4/pie_example.png" width="600px">
 
 ```{hint}
 You can use either the perf counter or the ticks displayed in the results after execution as your data source.  
@@ -104,7 +112,7 @@ $ cp \
   src/tensorflow/lite/kernels/internal/reference/integer_ops/logistic.h
 ```
 ````{important}
-Add the **sixth perf counter** at the beginning and end of the topmost Logistic function within the `logistic.h` file in your project. **This step is crucial for evaluating your score, so please ensure it is not overlooked.**
+Add the **sixth perf counter** at the beginning and end of the **topmost** Logistic function within the `logistic.h` file in your project. This step is crucial for evaluating your score, so please ensure it is not overlooked.
 
 ```cpp
 inline void Logistic(int32_t input_zero_point, int32_t input_range_radius,
@@ -128,6 +136,10 @@ You will get **0%** if you can't pass the golden test of the Logistic Test Model
 ```
 
 TBD
+
+```{hint}
+You may need to accelerate both the exponential and reciprocal parts in order to meet the full score cycle count criteria.
+```
 
 ### Guide
 
@@ -197,23 +209,48 @@ always @(posedge clk) begin
 end
 ```
 
-For calculating results using hardware, you have the option to employ either a **Lookup Table** or Mathematical Approximation methods, such as the **Taylor Series**, **Newton-Raphson division**, or **Polynomial Approximation**.
+For calculating results using hardware, you have the option to employ either a Lookup Table or Mathematical Approximation methods, such as the Taylor Series, Newton-Raphson division, or Polynomial Approximation.
 
 In this lab, for the **exponential function, we recommend using either a Lookup Table or the Taylor Series**. For the **reciprocal function, we suggest using a Lookup Table or the Newton-Raphson division method**, similar to the approach used in one_over_one_plus_x_for_x_in_0_1(), but implemented in hardware.
 
-## Accelerating the Softmax Function - 60%
-`tensorflow/lite/kernels/internal/reference/softmax.h`
+## Accelerating the Softmax Function - 20%
 
 \begin{gather*}
-\text{softmax}(x) = 
+\text{softmax}(x_i) = \frac{e^{x_{i}}}{\sum_{j=1}^n e^{x_{j}}}
 \end{gather*}
 
-Add the integer version of the Softmax function to your project.
+Add the Softmax function to your project.
+```sh
+$ cp \
+  ../../third_party/tflite-micro/tensorflow/lite/kernels/internal/reference/softmax.h \
+  src/tensorflow/lite/kernels/internal/reference/softmax.h
+```
 
 ````{important}
-Add the **fifth perf counter** at the beginning and end of the **second** Softmax function within the `softmax.h` file in your project. **This step is crucial for evaluating your score, so please ensure it is not overlooked.**
+Add the **fifth perf counter** at the beginning and end of the **second** Softmax function within the `softmax.h` file in your project. This step is crucial for evaluating your score, so please ensure it is not overlooked.
 
 ```cpp
+// Quantized softmax with int8_t/uint8_t input and int8_t/uint8_t/int16_t
+// output.
+template <typename InputT, typename OutputT>
+inline void Softmax(const SoftmaxParams& params,
+                    const RuntimeShape& input_shape, const InputT* input_data,
+                    const RuntimeShape& output_shape, OutputT* output_data) {
+  perf_enable_counter(5);
+  
+  ...
 
+  perf_disable_counter(5);
+}
 ```
 ````
+
+### Evaluation Criteria
+
+TBD
+
+### Guide
+
+Following the previous approach, replacing the exponential and reciprocal functions with CFU operations is a good idea. The CFU operations designed for the Logistic function might work here too. 
+
+But, be careful: the fixed-point integer bits used for the exponential function are different in the Logistic and Softmax functions—**the Logistic uses 4 and the Softmax uses 5**. Pay close attention to this detail.
