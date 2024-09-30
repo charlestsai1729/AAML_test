@@ -39,15 +39,12 @@ It's totally fine if you want to use something else instead of using this BRAM b
 
 After all the hardware coding and designing the `cfu_op` to pass and recieve data from your accelerator, it is nice to do some verification now, we have provide a test before you really dive into the complicated inferencing of the KWS model.
 
-1. copy the `functional_cfu_tests.cc` to your project
+1. Run this command under the project directory to wget the golden test `functional_cfu_tests.cc` to your project
 ```
-$ cp \
-  ../../common/src/functional_cfu_tests.cc \
-  src/
+$ wget -P src/ https://github.com/gnkre/lab5_from_hell/raw/master/src/functional_cfu_tests.cc
 ```
-2. Replace the `functional_cfu_tests.cc` under your directory with ours [**HERE**](https://github.com/gnkre/lab5_from_hell/blob/master/src/functional_cfu_tests.cc)
 
-3. `make clean`, `make prog EXTRA_LITEX_ARGS="--cpu-variant=perf+cfu"`, `make load` and enter `2: Functional CFU Tests` from the main menu, it shall look something like this:
+2. `make clean`, `make prog EXTRA_LITEX_ARGS="--cpu-variant=perf+cfu"`, `make load` and enter `2: Functional CFU Tests` from the main menu, it shall look something like this:
 
 ```
 Tests for Functional CFUs

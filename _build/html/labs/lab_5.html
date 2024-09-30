@@ -366,15 +366,12 @@ document.write(`
 </div>
 <p>After all the hardware coding and designing the <code class="docutils literal notranslate"><span class="pre">cfu_op</span></code> to pass and recieve data from your accelerator, it is nice to do some verification now, we have provide a test before you really dive into the complicated inferencing of the KWS model.</p>
 <ol class="arabic simple">
-<li><p>copy the <code class="docutils literal notranslate"><span class="pre">functional_cfu_tests.cc</span></code> to your project</p></li>
+<li><p>Run this command under the project directory to wget the golden test <code class="docutils literal notranslate"><span class="pre">functional_cfu_tests.cc</span></code> to your project</p></li>
 </ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cp \
-  ../../common/src/functional_cfu_tests.cc \
-  src/
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ wget -P src/ https://github.com/gnkre/lab5_from_hell/raw/master/src/functional_cfu_tests.cc
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li><p>Replace the <code class="docutils literal notranslate"><span class="pre">functional_cfu_tests.cc</span></code> under your directory with ours <a class="reference external" href="https://github.com/gnkre/lab5_from_hell/blob/master/src/functional_cfu_tests.cc"><strong>HERE</strong></a></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code>, <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">prog</span> <span class="pre">EXTRA_LITEX_ARGS=&quot;--cpu-variant=perf+cfu&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">load</span></code> and enter <code class="docutils literal notranslate"><span class="pre">2:</span> <span class="pre">Functional</span> <span class="pre">CFU</span> <span class="pre">Tests</span></code> from the main menu, it shall look something like this:</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Tests for Functional CFUs
