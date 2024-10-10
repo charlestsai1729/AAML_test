@@ -361,7 +361,7 @@ document.write(`
 <section id="intergration-and-verification-x">
 <h3>Intergration and Verification - x%<a class="headerlink" href="#intergration-and-verification-x" title="Link to this heading">#</a></h3>
 <p>Now you are ready to do the intergration! Create a new project folder just like previous labs.</p>
-<p>As shown in the block diagram, we will also be intergrating global buffer A, B and C into the CFU, we have provide a global buffer design that uses the BRAM resources of the FPGA, please mind that this buffer does not have an async reset.</p>
+<p>As shown in the block diagram, we will also be intergrating global buffer A, B and C into the CFU, we have provide a global buffer design that uses the BRAM resources of the FPGA, <strong>please mind that this buffer does not have an async reset</strong>.</p>
 <p>Since Vivado will utilize a lot of flip flops when synthesizing original lab 3 buffer, so make sure you have replace it, otherwise you may run into timing and utilization issues.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -453,7 +453,7 @@ document.write(`
 <td><p>&lt; 25M</p></td>
 <td class="text-left"><p>&lt; 25M</p></td>
 <td class="text-left"><p>&lt; 25M</p></td>
-<td><p>&lt; 60M</p></td>
+<td><p>&lt; 40M</p></td>
 </tr>
 <tr class="row-odd"><td><p>Score</p></td>
 <td><p>X</p></td>

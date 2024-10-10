@@ -35,7 +35,7 @@ The pattern generator will generate 50 sets of two 16*16 matrix using int8 ∈ [
 
 Now you are ready to do the intergration! Create a new project folder just like previous labs.
 
-As shown in the block diagram, we will also be intergrating global buffer A, B and C into the CFU, we have provide a global buffer design that uses the BRAM resources of the FPGA, please mind that this buffer does not have an async reset.
+As shown in the block diagram, we will also be intergrating global buffer A, B and C into the CFU, we have provide a global buffer design that uses the BRAM resources of the FPGA, **please mind that this buffer does not have an async reset**.
 
 Since Vivado will utilize a lot of flip flops when synthesizing original lab 3 buffer, so make sure you have replace it, otherwise you may run into timing and utilization issues.
 ```{important}
@@ -111,7 +111,7 @@ You will get **0%** if you can't pass the golden test or did't meet the requirem
 
 | Passes pattern       | Pattern 1 | Pattern 2 | Patten 3 | Pattern 4 | 4096 times 1-4|
 | -------------------  | --------- | --------- |:-------- |:--------- | ------------- |
-| cycle ct. requirement|  < 25M    | < 25M     |  < 25M   |  < 25M    |  < 60M        |
+| cycle ct. requirement|  < 25M    | < 25M     |  < 25M   |  < 25M    |  < 40M        |
 | Score                |         X |         X |        X |         X |             X |
 
 
