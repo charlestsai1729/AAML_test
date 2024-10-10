@@ -18,6 +18,8 @@ Since the systolic array is designed for matrix multiplication, a technique know
 
 The matrix data needs to be transmitted from the CPU to the global buffers A and B in the CFU. Once all the required data has been gathered, then the TPU will start to compute this matrix data. The outcome of the computation will be preserved in the buffer C. Finally, the data stored in the buffer C will be written back to the CPU.
 
+<img src="images/lab5/block_diagram.png" width="600px">
+
 ### Deal with Signed int8 - x%
 
 The key word spotting model we intend to accelerate uses int8, and since negative values occur during computation, we need to modify it to support operations with signed integers.

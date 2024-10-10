@@ -347,6 +347,8 @@ document.write(`
 <h2>Integrate Systolic Array to CFU Playground and Run Matmul - X%<a class="headerlink" href="#integrate-systolic-array-to-cfu-playground-and-run-matmul-x" title="Link to this heading">#</a></h2>
 <hr class="docutils" />
 <p>The matrix data needs to be transmitted from the CPU to the global buffers A and B in the CFU. Once all the required data has been gathered, then the TPU will start to compute this matrix data. The outcome of the computation will be preserved in the buffer C. Finally, the data stored in the buffer C will be written back to the CPU.</p>
+<a class="reference internal image-reference" href="../_images/block_diagram.png"><img alt="../_images/block_diagram.png" src="../_images/block_diagram.png" style="width: 600px;" />
+</a>
 <section id="deal-with-signed-int8-x">
 <h3>Deal with Signed int8 - x%<a class="headerlink" href="#deal-with-signed-int8-x" title="Link to this heading">#</a></h3>
 <p>The key word spotting model we intend to accelerate uses int8, and since negative values occur during computation, we need to modify it to support operations with signed integers.</p>
