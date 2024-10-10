@@ -308,11 +308,16 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal-of-this-lab">Goal of this lab</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integrate-systolic-array-to-cfu-playground-and-run-matmul-x">Integrate Systolic Array to CFU Playground and Run Matmul - X%</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integrate-systolic-array-to-cfu-playground-and-run-matmul-20">Integrate Systolic Array to CFU Playground and Run Matmul - 20%</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deal-with-signed-int8-x">Deal with Signed int8 - x%</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intergration-and-verification-x">Intergration and Verification - x%</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#im2col-for-convolution-20">im2col for Convolution - 20%</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-criteria">Evaluation Criteria</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-everything-together-50">Get Everything Together - 50%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#questions-in-the-demo-10">Questions in the Demo - 10%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission">Submission</a></li>
 </ul>
@@ -332,7 +337,9 @@ document.write(`
 <h2>Goal of this lab<a class="headerlink" href="#goal-of-this-lab" title="Link to this heading">#</a></h2>
 <hr class="docutils" />
 <ul class="simple">
-<li><p><a class="reference internal" href="#integrate-systolic-array-to-cfu-playground-and-run-matmul-x"><span class="xref myst">Integrate Systolic Array to CFU Playground and Run Matmul - X%</span></a></p></li>
+<li><p><a class="reference internal" href="#integrate-systolic-array-to-cfu-playground-and-run-matmul-20"><span class="xref myst">Integrate Systolic Array to CFU Playground and Run Matmul - 20%</span></a></p></li>
+<li><p><a class="reference internal" href="#im2col-for-convolution-20"><span class="xref myst">im2col for Convolution - 20%</span></a></p></li>
+<li><p><a class="reference internal" href="#get-everything-together-50"><span class="xref myst">Get Everything Together - 50%</span></a></p></li>
 <li><p><a class="reference internal" href="#questions-in-the-demo-10"><span class="xref myst">Questions in the Demo - 10%</span></a></p></li>
 </ul>
 </section>
@@ -343,8 +350,8 @@ document.write(`
 <p>To successfully integrate your systolic array into CFU-Playground, several modifications are required to make your design synthesizable and meet the necessary constraints. Additionally, you will develop a set of CFU operations that enable efficient communication between the CPU and the TPU for controlling your hardware.</p>
 <p>Since the systolic array is designed for matrix multiplication, a technique known as im2col is essential to adapt it for accelerating 2D convolution operations by converting convolutions into matrix multiplications. You’ll also need to implement it in this lab.</p>
 </section>
-<section id="integrate-systolic-array-to-cfu-playground-and-run-matmul-x">
-<h2>Integrate Systolic Array to CFU Playground and Run Matmul - X%<a class="headerlink" href="#integrate-systolic-array-to-cfu-playground-and-run-matmul-x" title="Link to this heading">#</a></h2>
+<section id="integrate-systolic-array-to-cfu-playground-and-run-matmul-20">
+<h2>Integrate Systolic Array to CFU Playground and Run Matmul - 20%<a class="headerlink" href="#integrate-systolic-array-to-cfu-playground-and-run-matmul-20" title="Link to this heading">#</a></h2>
 <hr class="docutils" />
 <p>The matrix data needs to be transmitted from the CPU to the global buffers A and B in the CFU. Once all the required data has been gathered, then the TPU will start to compute this matrix data. The outcome of the computation will be preserved in the buffer C. Finally, the data stored in the buffer C will be written back to the CPU.</p>
 <a class="reference internal image-reference" href="../_images/block_diagram.png"><img alt="../_images/block_diagram.png" src="../_images/block_diagram.png" style="width: 600px;" />
@@ -467,6 +474,59 @@ document.write(`
 </div>
 </section>
 </section>
+<section id="im2col-for-convolution-20">
+<h2>im2col for Convolution - 20%<a class="headerlink" href="#im2col-for-convolution-20" title="Link to this heading">#</a></h2>
+<p>Using the im2col technique, we can convert a 2D convolution operation into the multiplication of two matrices, which can then be efficiently accelerated by the systolic array.</p>
+<p>To construct these two matrices, which we will refer to as the kernel matrix and the im2col matrix, you can refer to the article:
+<a class="reference external" href="https://petewarden.com/2015/04/20/why-gemm-is-at-the-heart-of-deep-learning/">Why GEMM is at the heart of deep learning</a></p>
+<p>Here is the core part I excerpted from the article:</p>
+<blockquote>
+<div><p>The first step is to turn the input from an image, which is effectively a 3D array, into a 2D array that we can treat like a matrix. Where each kernel is applied is a little three-dimensional cube within the image, and so we take each one of those cubes of input values and copy them out as a single column into a matrix. This is known as im2col, for image-to-column.<br />
+<a class="reference internal" href="../_images/im2col_1.png"><img alt="../_images/im2col_1.png" src="../_images/im2col_1.png" style="width: 600px;" /></a><br />
+Now you have the input image in matrix form, you do the same for each kernel’s weights, serializing the 3D cubes into rows as the second matrix for the multiplication. Here’s what the final GEMM looks like:<br />
+<a class="reference internal" href="../_images/im2col_2.png"><img alt="../_images/im2col_2.png" src="../_images/im2col_2.png" style="width: 600px;" /></a><br />
+Here ‘k’ is the number of values in each patch and kernel, so it’s kernel width * kernel height * depth. The resulting matrix is ‘Number of patches’ columns high, by ‘Number of kernel’ rows wide. This matrix is actually treated as a 3D array by subsequent operations, by taking the number of kernels dimension as the depth, and then splitting the patches back into rows and columns based on their original position in the input image.</p>
+</div></blockquote>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Other than the shapes of convolution, it is also crucial to handle parameters such as <strong>stride, dilation and padding</strong> correctly to ensure the matrices are constructed properly for the convolution.</p>
+<p>For simplicity, in this lab, <strong>you can ignore batch and group</strong> parameters, assuming both are set to 1. This assumption will still allow you to pass all the required tests.</p>
+</div>
+<p>Also, you may have noticed that dynamic memory allocation, such as using new or malloc, is not supported in CFU-Playground. Therefore, we recommand declaring fixed-size arrays, for example:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int8_t</span><span class="w"> </span><span class="n">im2col</span><span class="p">[...][...];</span>
+<span class="kt">int8_t</span><span class="w"> </span><span class="n">kernel</span><span class="p">[...][...];</span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="n">result</span><span class="p">[...][...];</span>
+</pre></div>
+</div>
+<p>Once the kernel matrix and im2col matrix are constructed, you can perform a simple matrix multiplication (naive GEMM) to verify your implementation in this part.</p>
+<p>Afterward, you will need to reconstruct the output tensor from the result matrix. This process shares similar concepts with constructing the im2col and kernel matrices. Finally, don’t forget to apply post-processing to the tensor, such as quantization and bias addition.</p>
+<section id="evaluation-criteria">
+<h3>Evaluation Criteria<a class="headerlink" href="#evaluation-criteria" title="Link to this heading">#</a></h3>
+<p>If you successfully complete the final part <a class="reference internal" href="#get-everything-together-50"><span class="xref myst">Get Everything Together</span></a>, you will automatically receive the score for this section. However, if you are unable to complete the final part, you can test this section independently and still earn the score for it.</p>
+<p>To earn the score for this part, you need to perform the im2col transformation for the convolution. However, the matrix multiplication can be handled purely through software using a naive GEMM implementation. To pass, you must successfully complete the <code class="docutils literal notranslate"><span class="pre">TFLite</span> <span class="pre">Unit</span> <span class="pre">Tests</span></code> without any failures.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CFU</span> <span class="n">Playground</span>
+<span class="o">==============</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="n">TfLM</span> <span class="n">Models</span> <span class="n">menu</span>
+ <span class="mi">2</span><span class="p">:</span> <span class="n">Functional</span> <span class="n">CFU</span> <span class="n">Tests</span>
+ <span class="mi">3</span><span class="p">:</span> <span class="n">Project</span> <span class="n">menu</span>
+ <span class="mi">4</span><span class="p">:</span> <span class="n">Performance</span> <span class="n">Counter</span> <span class="n">Tests</span>
+<span class="o">&gt;</span><span class="mi">5</span><span class="p">:</span> <span class="n">TFLite</span> <span class="n">Unit</span> <span class="n">Tests</span>
+ <span class="mi">6</span><span class="p">:</span> <span class="n">Benchmarks</span>
+ <span class="mi">7</span><span class="p">:</span> <span class="n">Util</span> <span class="n">Tests</span>
+ <span class="mi">8</span><span class="p">:</span> <span class="n">Embench</span> <span class="n">IoT</span>
+<span class="n">main</span><span class="o">&gt;</span> <span class="mi">5</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">12</span><span class="o">/</span><span class="mi">12</span> <span class="n">tests</span> <span class="n">passed</span>
+<span class="o">~~~</span><span class="n">ALL</span> <span class="n">TESTS</span> <span class="n">PASSED</span><span class="o">~~~</span>
+</pre></div>
+</div>
+<p>All 12 tests must be passed.</p>
+</section>
+</section>
+<section id="get-everything-together-50">
+<h2>Get Everything Together - 50%<a class="headerlink" href="#get-everything-together-50" title="Link to this heading">#</a></h2>
+</section>
 <section id="questions-in-the-demo-10">
 <h2>Questions in the Demo - 10%<a class="headerlink" href="#questions-in-the-demo-10" title="Link to this heading">#</a></h2>
 <hr class="docutils" />
@@ -531,11 +591,16 @@ document.write(`
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal-of-this-lab">Goal of this lab</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integrate-systolic-array-to-cfu-playground-and-run-matmul-x">Integrate Systolic Array to CFU Playground and Run Matmul - X%</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integrate-systolic-array-to-cfu-playground-and-run-matmul-20">Integrate Systolic Array to CFU Playground and Run Matmul - 20%</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deal-with-signed-int8-x">Deal with Signed int8 - x%</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intergration-and-verification-x">Intergration and Verification - x%</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#im2col-for-convolution-20">im2col for Convolution - 20%</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-criteria">Evaluation Criteria</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-everything-together-50">Get Everything Together - 50%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#questions-in-the-demo-10">Questions in the Demo - 10%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission">Submission</a></li>
 </ul>

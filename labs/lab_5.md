@@ -2,7 +2,9 @@
 
 ## Goal of this lab
 ---
-- [Integrate Systolic Array to CFU Playground and Run Matmul - X%](#integrate-systolic-array-to-cfu-playground-and-run-matmul-x)
+- [Integrate Systolic Array to CFU Playground and Run Matmul - 20%](#integrate-systolic-array-to-cfu-playground-and-run-matmul-20)
+- [im2col for Convolution - 20%](#im2col-for-convolution-20)
+- [Get Everything Together - 50%](#get-everything-together-50)
 - [Questions in the Demo - 10%](#questions-in-the-demo-10)
 
 ## Introduction
@@ -13,7 +15,7 @@ To successfully integrate your systolic array into CFU-Playground, several modif
 
 Since the systolic array is designed for matrix multiplication, a technique known as im2col is essential to adapt it for accelerating 2D convolution operations by converting convolutions into matrix multiplications. You'll also need to implement it in this lab.
 
-## Integrate Systolic Array to CFU Playground and Run Matmul - X%
+## Integrate Systolic Array to CFU Playground and Run Matmul - 20%
 ---
 
 The matrix data needs to be transmitted from the CPU to the global buffers A and B in the CFU. Once all the required data has been gathered, then the TPU will start to compute this matrix data. The outcome of the computation will be preserved in the buffer C. Finally, the data stored in the buffer C will be written back to the CPU.
@@ -113,6 +115,65 @@ You will get **0%** if you can't pass the golden test or did't meet the requirem
 | -------------------  | --------- | --------- |:-------- |:--------- | ------------- |
 | cycle ct. requirement|  < 25M    | < 25M     |  < 25M   |  < 25M    |  < 40M        |
 | Score                |         X |         X |        X |         X |             X |
+
+## im2col for Convolution - 20%
+
+Using the im2col technique, we can convert a 2D convolution operation into the multiplication of two matrices, which can then be efficiently accelerated by the systolic array.
+
+To construct these two matrices, which we will refer to as the kernel matrix and the im2col matrix, you can refer to the article:
+[Why GEMM is at the heart of deep learning](https://petewarden.com/2015/04/20/why-gemm-is-at-the-heart-of-deep-learning/)
+
+Here is the core part I excerpted from the article:
+
+> The first step is to turn the input from an image, which is effectively a 3D array, into a 2D array that we can treat like a matrix. Where each kernel is applied is a little three-dimensional cube within the image, and so we take each one of those cubes of input values and copy them out as a single column into a matrix. This is known as im2col, for image-to-column.  
+<img src="images/lab5/im2col_1.png" width="600px">  
+Now you have the input image in matrix form, you do the same for each kernel’s weights, serializing the 3D cubes into rows as the second matrix for the multiplication. Here’s what the final GEMM looks like:  
+<img src="images/lab5/im2col_2.png" width="600px">  
+Here ‘k’ is the number of values in each patch and kernel, so it’s kernel width * kernel height * depth. The resulting matrix is ‘Number of patches’ columns high, by ‘Number of kernel’ rows wide. This matrix is actually treated as a 3D array by subsequent operations, by taking the number of kernels dimension as the depth, and then splitting the patches back into rows and columns based on their original position in the input image.
+
+```{attention}
+Other than the shapes of convolution, it is also crucial to handle parameters such as **stride, dilation and padding** correctly to ensure the matrices are constructed properly for the convolution.
+
+For simplicity, in this lab, **you can ignore batch and group** parameters, assuming both are set to 1. This assumption will still allow you to pass all the required tests.
+```
+
+Also, you may have noticed that dynamic memory allocation, such as using new or malloc, is not supported in CFU-Playground. Therefore, we recommand declaring fixed-size arrays, for example:
+```cpp
+int8_t im2col[...][...];
+int8_t kernel[...][...];
+int32_t result[...][...];
+``` 
+
+Once the kernel matrix and im2col matrix are constructed, you can perform a simple matrix multiplication (naive GEMM) to verify your implementation in this part.
+
+Afterward, you will need to reconstruct the output tensor from the result matrix. This process shares similar concepts with constructing the im2col and kernel matrices. Finally, don’t forget to apply post-processing to the tensor, such as quantization and bias addition.
+
+### Evaluation Criteria
+
+If you successfully complete the final part [Get Everything Together](#get-everything-together-50), you will automatically receive the score for this section. However, if you are unable to complete the final part, you can test this section independently and still earn the score for it.
+
+To earn the score for this part, you need to perform the im2col transformation for the convolution. However, the matrix multiplication can be handled purely through software using a naive GEMM implementation. To pass, you must successfully complete the `TFLite Unit Tests` without any failures.  
+```
+CFU Playground
+==============
+ 1: TfLM Models menu
+ 2: Functional CFU Tests
+ 3: Project menu
+ 4: Performance Counter Tests
+>5: TFLite Unit Tests
+ 6: Benchmarks
+ 7: Util Tests
+ 8: Embench IoT
+main> 5
+```
+```
+12/12 tests passed
+~~~ALL TESTS PASSED~~~
+```
+
+All 12 tests must be passed.
+
+## Get Everything Together - 50%
 
 
 ## Questions in the Demo - 10%
