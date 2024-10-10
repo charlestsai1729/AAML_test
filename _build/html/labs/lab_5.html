@@ -372,7 +372,7 @@ document.write(`
 <ol class="arabic simple">
 <li><p>Run this command under the project directory to wget the golden test <code class="docutils literal notranslate"><span class="pre">functional_cfu_tests.cc</span></code> to your project</p></li>
 </ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ wget -P src/ https://github.com/gnkre/lab5_from_hell/raw/master/src/functional_cfu_tests.cc
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ wget -P src/ https://github.com/nycu-caslab/AAML2024/raw/main/lab5_util/functional_cfu_tests.cc
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
@@ -397,14 +397,14 @@ document.write(`
 <ul class="simple">
 <li><p>All the pattern we use to test are 16*16 int8, that is, the M, N, K are all 16.</p></li>
 <li><p>The input layout are just like lab3, you may checkout the details in the comment of <code class="docutils literal notranslate"><span class="pre">functional_cfu_tests.cc</span></code>.</p></li>
-<li><p>For the output, you are required to place it to a row-major 1-D matrix.</p></li>
+<li><p>For the output, you are required to place it to a 2D 16*16 int32 matrix.</p></li>
 <li><p>We are using the <code class="docutils literal notranslate"><span class="pre">perf_counter</span></code> here, so make sure you <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">prog</span> <span class="pre">EXTRA_LITEX_ARGS=&quot;--cpu-variant=perf+cfu&quot;</span></code>.</p></li>
 <li><p>Or you might get stuck running patterns because you don’t have the <code class="docutils literal notranslate"><span class="pre">perf_counters</span></code> enabled.</p></li>
 </ul>
 </div>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">do_matmul_num</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">test_num</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="c1">// place your answer in this array!</span>
-<span class="w">  </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">C_arr</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<span class="w">  </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">C_arr</span><span class="p">[</span><span class="mi">16</span><span class="p">][</span><span class="mi">16</span><span class="p">];</span>
 
 <span class="w">  </span><span class="c1">// =====================================================</span>
 <span class="w">  </span><span class="c1">// Implement your design here, </span>
@@ -412,6 +412,7 @@ document.write(`
 <span class="w">  </span><span class="c1">// ===================================================== </span>
 
 <span class="w">  </span><span class="cm">/**</span>
+<span class="cm">    All inputs are 16*16 signed int8 matrix, outputs are 16*16 signed int32.</span>
 <span class="cm">    1. Pass data to CFU.</span>
 <span class="cm">    2. Pass matrix parameters to CFU.</span>
 <span class="cm">    3. Receive data from CFU and place it to `C_arr`.</span>
@@ -421,11 +422,13 @@ document.write(`
 <span class="w">  </span><span class="c1">// DO NOT MODIFY ANYTHING &quot;BELOW&quot; THIS LINE !!</span>
 <span class="w">  </span><span class="c1">// =====================================================</span>
 
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">256</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">C_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">C_arr_ans</span><span class="p">[</span><span class="n">test_num</span><span class="p">][</span><span class="n">i</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">error_ct</span><span class="o">++</span><span class="p">;</span>
-<span class="w">      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;*** %ld error(s) @ pattern no. %d</span><span class="se">\n</span><span class="s"> ---&gt; golden C_arr[%02ld][%02ld] = %08lX, your C_arr[%02ld][%02ld] = %08lX</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span>
-<span class="w">        </span><span class="n">error_ct</span><span class="p">,</span><span class="w"> </span><span class="n">test_num</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">&gt;&gt;</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">&amp;</span><span class="mh">0xF</span><span class="p">,</span><span class="w"> </span><span class="n">C_arr_ans</span><span class="p">[</span><span class="n">test_num</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">i</span><span class="o">&gt;&gt;</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">&amp;</span><span class="mh">0xF</span><span class="p">,</span><span class="w"> </span><span class="n">C_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">C_arr</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">C_arr_ans</span><span class="p">[</span><span class="n">test_num</span><span class="p">][(</span><span class="n">i</span><span class="o">&lt;&lt;</span><span class="mi">4</span><span class="p">)</span><span class="o">+</span><span class="n">j</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">error_ct</span><span class="o">++</span><span class="p">;</span>
+<span class="w">	</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;*** %ld error(s) @ pattern no. %d</span><span class="se">\n</span><span class="s"> ---&gt; golden C_arr[%02ld][%02ld] = %08lX, your C_arr[%02ld][%02ld] = %08lX</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="n">error_ct</span><span class="p">,</span><span class="w"> </span><span class="n">test_num</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">C_arr_ans</span><span class="p">[</span><span class="n">test_num</span><span class="p">][(</span><span class="n">i</span><span class="o">&lt;&lt;</span><span class="mi">4</span><span class="p">)</span><span class="o">+</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">C_arr</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+<span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 </pre></div>
