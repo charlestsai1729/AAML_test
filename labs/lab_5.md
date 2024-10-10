@@ -48,7 +48,7 @@ After all the hardware coding and designing the `cfu_op` to pass and recieve dat
 
 1. Run this command under the project directory to wget the golden test `functional_cfu_tests.cc` to your project
 ```
-$ wget -P src/ https://github.com/gnkre/lab5_from_hell/raw/master/src/functional_cfu_tests.cc
+$ wget -P src/ https://github.com/nycu-caslab/AAML2024/raw/main/lab5_util/functional_cfu_tests.cc
 ```
 
 2. `make clean`, `make prog EXTRA_LITEX_ARGS="--cpu-variant=perf+cfu"`, `make load` and enter `2: Functional CFU Tests` from the main menu, it shall look something like this:
@@ -69,7 +69,7 @@ Tests for Functional CFUs
 ```{important}
 - All the pattern we use to test are 16*16 int8, that is, the M, N, K are all 16.
 - The input layout are just like lab3, you may checkout the details in the comment of `functional_cfu_tests.cc`.
-- For the output, you are required to place it to a row-major 1-D matrix.
+- For the output, you are required to place it to a 2D 16*16 int32 matrix.
 - We are using the `perf_counter` here, so make sure you `make prog EXTRA_LITEX_ARGS="--cpu-variant=perf+cfu"`.
 - Or you might get stuck running patterns because you don't have the `perf_counters` enabled.
 ```
@@ -77,7 +77,7 @@ Tests for Functional CFUs
 ```c
 void do_matmul_num(int test_num) {
   // place your answer in this array!
-  uint32_t C_arr[256];
+  uint32_t C_arr[16][16];
 
   // =====================================================
   // Implement your design here, 
@@ -85,6 +85,7 @@ void do_matmul_num(int test_num) {
   // ===================================================== 
 
   /**
+    All inputs are 16*16 signed int8 matrix, outputs are 16*16 signed int32.
     1. Pass data to CFU.
     2. Pass matrix parameters to CFU.
     3. Receive data from CFU and place it to `C_arr`.
@@ -94,11 +95,13 @@ void do_matmul_num(int test_num) {
   // DO NOT MODIFY ANYTHING "BELOW" THIS LINE !!
   // =====================================================
 
-  for (uint32_t i = 0; i < 256; i++) {
-    if (C_arr[i] != C_arr_ans[test_num][i]) {
-      error_ct++;
-      printf("*** %ld error(s) @ pattern no. %d\n ---> golden C_arr[%02ld][%02ld] = %08lX, your C_arr[%02ld][%02ld] = %08lX\n", 
-        error_ct, test_num, i>>4, i&0xF, C_arr_ans[test_num][i], i>>4, i&0xF, C_arr[i]);
+  for (uint32_t i = 0; i < 16; i++) {
+    for (uint32_t j = 0; j < 16; j++) {
+      if (C_arr[i][j] != C_arr_ans[test_num][(i<<4)+j]) {
+        error_ct++;
+	printf("*** %ld error(s) @ pattern no. %d\n ---> golden C_arr[%02ld][%02ld] = %08lX, your C_arr[%02ld][%02ld] = %08lX\n",
+          error_ct, test_num, i, j, C_arr_ans[test_num][(i<<4)+j], i, j, C_arr[i][j]);
+      }
     }
   }
 ```
