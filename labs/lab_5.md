@@ -237,7 +237,7 @@ Note that your systolic array + im2col shall be faster than lab2's SIMD method, 
 
 Also, to earn the score for this part, you must successfully complete the `TFLite Unit Tests` without any failures.
 ```{important} 
-You will get **0%** if you can't pass the golden test or didn't meet the requirement.
+You will get **0%** if you can't pass the `TFLite Unit Tests` or didn't meet the requirement.
 ```
 
 | Cycles of Counter 6 |  > XM |      XM | <  XM |
