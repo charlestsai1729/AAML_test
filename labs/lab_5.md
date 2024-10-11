@@ -22,7 +22,7 @@ The matrix data needs to be transmitted from the CPU to the global buffers A and
 
 <img src="images/lab5/block_diagram.png" width="600px">
 
-### Deal with Signed int8 - x%
+### Deal with Signed int8
 
 The key word spotting model we intend to accelerate uses int8, and since negative values occur during computation, we need to modify it to support operations with signed integers.
 
@@ -33,7 +33,7 @@ $ make verif_signed
 The pattern generator will generate 50 sets of two 16*16 matrix using int8 ∈ [-128, 128) and pass it to your systolic array and check the answers.
 
 
-### Intergration and Verification - x%
+### Intergration and Verification - 20%
 
 Now you are ready to do the intergration! Create a new project folder just like previous labs.
 
@@ -107,8 +107,12 @@ void do_matmul_num(int test_num) {
     }
   }
 ```
+### Evaluation Criteria
+
+If you successfully complete the final part [Get Everything Together](#get-everything-together-50), you will automatically receive the score for this section. However, if you are unable to complete the final part, you can test this section independently and still earn the score for it.
+
 ```{important} 
-You will get **0%** if you can't pass the golden test or did't meet the requirement.
+You will get **0%** if you can't pass the golden test or didn't meet the requirement.
 ```
 
 | Passes pattern       | Pattern 1 | Pattern 2 | Patten 3 | Pattern 4 | 4096 times 1-4|
@@ -148,6 +152,13 @@ Once the kernel matrix and im2col matrix are constructed, you can perform a simp
 
 Afterward, you will need to reconstruct the output tensor from the result matrix. This process shares similar concepts with constructing the im2col and kernel matrices. Finally, don’t forget to apply post-processing to the tensor, such as quantization and bias addition.
 
+Under your project directory, add the `conv.h` to your project and do your modification on the  `ConvPerChannel` function.
+```sh
+$ cp \
+  ../../third_party/tflite-micro/tensorflow/lite/kernels/internal/reference/integer_ops/conv.h \
+  src/tensorflow/lite/kernels/internal/reference/integer_ops/conv.h
+```
+
 ### Evaluation Criteria
 
 If you successfully complete the final part [Get Everything Together](#get-everything-together-50), you will automatically receive the score for this section. However, if you are unable to complete the final part, you can test this section independently and still earn the score for it.
@@ -174,6 +185,44 @@ main> 5
 All 12 tests must be passed.
 
 ## Get Everything Together - 50%
+Now you have a working systolic array that can do matmul correctly, and a im2col SW code for turning convolution into matmul, it's time to get everything together!
+
+Please note that there are `input_offset` when doing convolution, you may either modify the hardware to accumulate with the offset, or try any method as you see fit.
+
+```
+acc += filter_val * (input_val + `input_offset`)
+```
+````{important}
+  Add the sixth perf counter at the beginning and end of the topmost `ConvPerChannel` function within the `conv.h` file in your project. This step is crucial for evaluating your score, so please ensure it is not overlooked.
+
+```cpp
+  // Fixed-point per-channel-quantization convolution reference kernel.
+  inline void ConvPerChannel(
+    const ConvParams& params, const int32_t* output_multiplier,
+    const int32_t* output_shift, const RuntimeShape& input_shape,
+    const int8_t* input_data, const RuntimeShape& filter_shape,
+    const int8_t* filter_data, const RuntimeShape& bias_shape,
+    const int32_t* bias_data, const RuntimeShape& output_shape,
+    int8_t* output_data) {
+    perf_enable_counter(6);
+
+    ...
+
+    perf_disable_counter(6);
+  }
+```
+````
+
+### Evaluation Criteria
+Note that your systolic array + im2col shall be faster than lab2's SIMD method, we will be running several labels to make sure you have done everything right.
+
+```{important} 
+You will get **0%** if you can't pass the golden test or didn't meet the requirement.
+```
+
+| Cycles of Counter 6 |  > XM |      XM | <  XM |
+| ------------------- |:----- |:------- |:----- |
+| Score               | 0     | 20      | 50    |
 
 
 ## Questions in the Demo - 10%

@@ -309,15 +309,19 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal-of-this-lab">Goal of this lab</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integrate-systolic-array-to-cfu-playground-and-run-matmul-20">Integrate Systolic Array to CFU Playground and Run Matmul - 20%</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deal-with-signed-int8-x">Deal with Signed int8 - x%</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intergration-and-verification-x">Intergration and Verification - x%</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#im2col-for-convolution-20">im2col for Convolution - 20%</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deal-with-signed-int8">Deal with Signed int8</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intergration-and-verification-20">Intergration and Verification - 20%</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-criteria">Evaluation Criteria</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-everything-together-50">Get Everything Together - 50%</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#im2col-for-convolution-20">im2col for Convolution - 20%</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Evaluation Criteria</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-everything-together-50">Get Everything Together - 50%</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Evaluation Criteria</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#questions-in-the-demo-10">Questions in the Demo - 10%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission">Submission</a></li>
 </ul>
@@ -356,8 +360,8 @@ document.write(`
 <p>The matrix data needs to be transmitted from the CPU to the global buffers A and B in the CFU. Once all the required data has been gathered, then the TPU will start to compute this matrix data. The outcome of the computation will be preserved in the buffer C. Finally, the data stored in the buffer C will be written back to the CPU.</p>
 <a class="reference internal image-reference" href="../_images/block_diagram.png"><img alt="../_images/block_diagram.png" src="../_images/block_diagram.png" style="width: 600px;" />
 </a>
-<section id="deal-with-signed-int8-x">
-<h3>Deal with Signed int8 - x%<a class="headerlink" href="#deal-with-signed-int8-x" title="Link to this heading">#</a></h3>
+<section id="deal-with-signed-int8">
+<h3>Deal with Signed int8<a class="headerlink" href="#deal-with-signed-int8" title="Link to this heading">#</a></h3>
 <p>The key word spotting model we intend to accelerate uses int8, and since negative values occur during computation, we need to modify it to support operations with signed integers.</p>
 <p>After finishing the modification, use the below command under the lab 3 directory <code class="docutils literal notranslate"><span class="pre">AAML2024-Lab3/</span></code> to make sure it can deal with int8 correctly.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make verif_signed
@@ -365,8 +369,8 @@ document.write(`
 </div>
 <p>The pattern generator will generate 50 sets of two 16*16 matrix using int8 ∈ [-128, 128) and pass it to your systolic array and check the answers.</p>
 </section>
-<section id="intergration-and-verification-x">
-<h3>Intergration and Verification - x%<a class="headerlink" href="#intergration-and-verification-x" title="Link to this heading">#</a></h3>
+<section id="intergration-and-verification-20">
+<h3>Intergration and Verification - 20%<a class="headerlink" href="#intergration-and-verification-20" title="Link to this heading">#</a></h3>
 <p>Now you are ready to do the intergration! Create a new project folder just like previous labs.</p>
 <p>As shown in the block diagram, we will also be intergrating global buffer A, B and C into the CFU, we have provide a global buffer design that uses the BRAM resources of the FPGA, <strong>please mind that this buffer does not have an async reset</strong>.</p>
 <p>Since Vivado will utilize a lot of flip flops when synthesizing original lab 3 buffer, so make sure you have replace it, otherwise you may run into timing and utilization issues.</p>
@@ -440,9 +444,13 @@ document.write(`
 <span class="w">  </span><span class="p">}</span>
 </pre></div>
 </div>
+</section>
+<section id="evaluation-criteria">
+<h3>Evaluation Criteria<a class="headerlink" href="#evaluation-criteria" title="Link to this heading">#</a></h3>
+<p>If you successfully complete the final part <a class="reference internal" href="#get-everything-together-50"><span class="xref myst">Get Everything Together</span></a>, you will automatically receive the score for this section. However, if you are unable to complete the final part, you can test this section independently and still earn the score for it.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>You will get <strong>0%</strong> if you can’t pass the golden test or did’t meet the requirement.</p>
+<p>You will get <strong>0%</strong> if you can’t pass the golden test or didn’t meet the requirement.</p>
 </div>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -500,8 +508,14 @@ Here ‘k’ is the number of values in each patch and kernel, so it’s kernel 
 </div>
 <p>Once the kernel matrix and im2col matrix are constructed, you can perform a simple matrix multiplication (naive GEMM) to verify your implementation in this part.</p>
 <p>Afterward, you will need to reconstruct the output tensor from the result matrix. This process shares similar concepts with constructing the im2col and kernel matrices. Finally, don’t forget to apply post-processing to the tensor, such as quantization and bias addition.</p>
-<section id="evaluation-criteria">
-<h3>Evaluation Criteria<a class="headerlink" href="#evaluation-criteria" title="Link to this heading">#</a></h3>
+<p>Under your project directory, add the <code class="docutils literal notranslate"><span class="pre">conv.h</span></code> to your project and do your modification on the  <code class="docutils literal notranslate"><span class="pre">ConvPerChannel</span></code> function.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cp<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>../../third_party/tflite-micro/tensorflow/lite/kernels/internal/reference/integer_ops/conv.h<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>src/tensorflow/lite/kernels/internal/reference/integer_ops/conv.h
+</pre></div>
+</div>
+<section id="id1">
+<h3>Evaluation Criteria<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <p>If you successfully complete the final part <a class="reference internal" href="#get-everything-together-50"><span class="xref myst">Get Everything Together</span></a>, you will automatically receive the score for this section. However, if you are unable to complete the final part, you can test this section independently and still earn the score for it.</p>
 <p>To earn the score for this part, you need to perform the im2col transformation for the convolution. However, the matrix multiplication can be handled purely through software using a naive GEMM implementation. To pass, you must successfully complete the <code class="docutils literal notranslate"><span class="pre">TFLite</span> <span class="pre">Unit</span> <span class="pre">Tests</span></code> without any failures.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CFU</span> <span class="n">Playground</span>
@@ -526,6 +540,56 @@ Here ‘k’ is the number of values in each patch and kernel, so it’s kernel 
 </section>
 <section id="get-everything-together-50">
 <h2>Get Everything Together - 50%<a class="headerlink" href="#get-everything-together-50" title="Link to this heading">#</a></h2>
+<p>Now you have a working systolic array that can do matmul correctly, and a im2col SW code for turning convolution into matmul, it’s time to get everything together!</p>
+<p>Please note that there are <code class="docutils literal notranslate"><span class="pre">input_offset</span></code> when doing convolution, you may either modify the hardware to accumulate with the offset, or try any method as you see fit.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>acc += filter_val * (input_val + `input_offset`)
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Add the sixth perf counter at the beginning and end of the topmost <code class="docutils literal notranslate"><span class="pre">ConvPerChannel</span></code> function within the <code class="docutils literal notranslate"><span class="pre">conv.h</span></code> file in your project. This step is crucial for evaluating your score, so please ensure it is not overlooked.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="c1">// Fixed-point per-channel-quantization convolution reference kernel.</span>
+<span class="w">  </span><span class="kr">inline</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ConvPerChannel</span><span class="p">(</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">ConvParams</span><span class="o">&amp;</span><span class="w"> </span><span class="n">params</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int32_t</span><span class="o">*</span><span class="w"> </span><span class="n">output_multiplier</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int32_t</span><span class="o">*</span><span class="w"> </span><span class="n">output_shift</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RuntimeShape</span><span class="o">&amp;</span><span class="w"> </span><span class="n">input_shape</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int8_t</span><span class="o">*</span><span class="w"> </span><span class="n">input_data</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RuntimeShape</span><span class="o">&amp;</span><span class="w"> </span><span class="n">filter_shape</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int8_t</span><span class="o">*</span><span class="w"> </span><span class="n">filter_data</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RuntimeShape</span><span class="o">&amp;</span><span class="w"> </span><span class="n">bias_shape</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int32_t</span><span class="o">*</span><span class="w"> </span><span class="n">bias_data</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RuntimeShape</span><span class="o">&amp;</span><span class="w"> </span><span class="n">output_shape</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">int8_t</span><span class="o">*</span><span class="w"> </span><span class="n">output_data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">perf_enable_counter</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+
+<span class="w">    </span><span class="p">...</span>
+
+<span class="w">    </span><span class="n">perf_disable_counter</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<section id="id2">
+<h3>Evaluation Criteria<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>Note that your systolic array + im2col shall be faster than lab2’s SIMD method, we will be running several labels to make sure you have done everything right.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>You will get <strong>0%</strong> if you can’t pass the golden test or didn’t meet the requirement.</p>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Cycles of Counter 6</p></th>
+<th class="head text-left"><p>&gt; XM</p></th>
+<th class="head text-left"><p>XM</p></th>
+<th class="head text-left"><p>&lt;  XM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Score</p></td>
+<td class="text-left"><p>0</p></td>
+<td class="text-left"><p>20</p></td>
+<td class="text-left"><p>50</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 <section id="questions-in-the-demo-10">
 <h2>Questions in the Demo - 10%<a class="headerlink" href="#questions-in-the-demo-10" title="Link to this heading">#</a></h2>
@@ -592,15 +656,19 @@ Here ‘k’ is the number of values in each patch and kernel, so it’s kernel 
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal-of-this-lab">Goal of this lab</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integrate-systolic-array-to-cfu-playground-and-run-matmul-20">Integrate Systolic Array to CFU Playground and Run Matmul - 20%</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deal-with-signed-int8-x">Deal with Signed int8 - x%</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intergration-and-verification-x">Intergration and Verification - x%</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#im2col-for-convolution-20">im2col for Convolution - 20%</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deal-with-signed-int8">Deal with Signed int8</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intergration-and-verification-20">Intergration and Verification - 20%</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-criteria">Evaluation Criteria</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-everything-together-50">Get Everything Together - 50%</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#im2col-for-convolution-20">im2col for Convolution - 20%</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Evaluation Criteria</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-everything-together-50">Get Everything Together - 50%</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Evaluation Criteria</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#questions-in-the-demo-10">Questions in the Demo - 10%</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission">Submission</a></li>
 </ul>
