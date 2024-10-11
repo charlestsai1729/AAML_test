@@ -541,6 +541,22 @@ Here ‘k’ is the number of values in each patch and kernel, so it’s kernel 
 <section id="get-everything-together-50">
 <h2>Get Everything Together - 50%<a class="headerlink" href="#get-everything-together-50" title="Link to this heading">#</a></h2>
 <p>Now you have a working systolic array that can do matmul correctly, and a im2col SW code for turning convolution into matmul, it’s time to get everything together!</p>
+<p>Since the the buffer size of systolic array is limited, you might need <strong>tiling</strong> for the matrix multiplication. If you are not familiar with it, you can refer to this article:<br />
+<a class="reference external" href="https://alvinwan.com/how-to-tile-matrix-multiplication/">How to tile matrix multiplication</a></p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">T</span><span class="p">;</span><span class="w"> </span><span class="c1">// tile size</span>
+
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">pad_M</span><span class="p">;</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">pad_N</span><span class="p">;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">pad_K</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// send to im2col buffer</span>
+<span class="w">      </span><span class="c1">// send to kernel buffer</span>
+<span class="w">      </span><span class="c1">// receive from output buffer</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You may run into some boundary problems when padding. Handle the values that are out of boundary correctly to achieve the correct result.</p>
 <p>Please note that there are <code class="docutils literal notranslate"><span class="pre">input_offset</span></code> when doing convolution, you may either modify the hardware to accumulate with the offset, or try any method as you see fit.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>acc += filter_val * (input_val + `input_offset`)
 </pre></div>
@@ -568,6 +584,7 @@ Here ‘k’ is the number of values in each patch and kernel, so it’s kernel 
 <section id="id2">
 <h3>Evaluation Criteria<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <p>Note that your systolic array + im2col shall be faster than lab2’s SIMD method, we will be running several labels to make sure you have done everything right.</p>
+<p>Also, to earn the score for this part, you must successfully complete the <code class="docutils literal notranslate"><span class="pre">TFLite</span> <span class="pre">Unit</span> <span class="pre">Tests</span></code> without any failures.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>You will get <strong>0%</strong> if you can’t pass the golden test or didn’t meet the requirement.</p>

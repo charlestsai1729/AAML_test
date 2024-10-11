@@ -187,6 +187,25 @@ All 12 tests must be passed.
 ## Get Everything Together - 50%
 Now you have a working systolic array that can do matmul correctly, and a im2col SW code for turning convolution into matmul, it's time to get everything together!
 
+Since the the buffer size of systolic array is limited, you might need **tiling** for the matrix multiplication. If you are not familiar with it, you can refer to this article:  
+[How to tile matrix multiplication](https://alvinwan.com/how-to-tile-matrix-multiplication/)
+
+```cpp
+constexpr int T; // tile size
+
+for (int m = 0; m < pad_M; m += T) {
+  for (int n = 0; n < pad_N; n += T) {
+    for (int k = 0; k < pad_K; k += T) {
+      // send to im2col buffer
+      // send to kernel buffer
+      // receive from output buffer
+    }
+  }
+}
+```
+
+You may run into some boundary problems when padding. Handle the values that are out of boundary correctly to achieve the correct result.
+
 Please note that there are `input_offset` when doing convolution, you may either modify the hardware to accumulate with the offset, or try any method as you see fit.
 
 ```
@@ -214,8 +233,9 @@ acc += filter_val * (input_val + `input_offset`)
 ````
 
 ### Evaluation Criteria
-Note that your systolic array + im2col shall be faster than lab2's SIMD method, we will be running several labels to make sure you have done everything right.
+Note that your systolic array + im2col shall be faster than lab2's SIMD method, we will be running several labels to make sure you have done everything right. 
 
+Also, to earn the score for this part, you must successfully complete the `TFLite Unit Tests` without any failures.
 ```{important} 
 You will get **0%** if you can't pass the golden test or didn't meet the requirement.
 ```
