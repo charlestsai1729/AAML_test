@@ -112,13 +112,12 @@ void do_matmul_num(int test_num) {
 If you successfully complete the final part [Get Everything Together](#get-everything-together-50), you will automatically receive the score for this section. However, if you are unable to complete the final part, you can test this section independently and still earn the score for it.
 
 ```{important} 
-You will get **0%** if you can't pass the golden test or didn't meet the requirement, we will only be checking `Matmul 16*16 int8 4096 times w/ 4 patterns rotating`.
+You will get **0%** if you can't pass the golden test or didn't meet the requirement, you have to pass every pattern below to get 20%.
 ```
 
-| Passes pattern       |  4096 times 1-4|
-| -------------------  |  ------------- |
-| cycle ct. requirement|   < 40M        |
-| Score                |              X |
+| Passes pattern       | Pattern 1 | Pattern 2 | Patten 3 | Pattern 4 | 4096 times 1-4|
+| -------------------  | --------- | --------- |:-------- |:--------- | ------------- |
+| cycle ct. requirement|  < 25M    | < 25M     |  < 25M   |  < 25M    |  < 40M        |
 
 ## im2col for Convolution - 20%
 
