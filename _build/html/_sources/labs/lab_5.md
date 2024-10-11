@@ -135,7 +135,7 @@ Now you have the input image in matrix form, you do the same for each kernel’s
 <img src="images/lab5/im2col_2.png" width="600px">  
 Here ‘k’ is the number of values in each patch and kernel, so it’s kernel width * kernel height * depth. The resulting matrix is ‘Number of patches’ columns high, by ‘Number of kernel’ rows wide. This matrix is actually treated as a 3D array by subsequent operations, by taking the number of kernels dimension as the depth, and then splitting the patches back into rows and columns based on their original position in the input image.
 
-```{attention}
+```{note}
 Other than the shapes of convolution, it is also crucial to handle parameters such as **stride, dilation and padding** correctly to ensure the matrices are constructed properly for the convolution.
 
 For simplicity, in this lab, **you can ignore batch and group** parameters, assuming both are set to 1. This assumption will still allow you to pass all the required tests.
@@ -157,6 +157,16 @@ Under your project directory, add the `conv.h` to your project and do your modif
 $ cp \
   ../../third_party/tflite-micro/tensorflow/lite/kernels/internal/reference/integer_ops/conv.h \
   src/tensorflow/lite/kernels/internal/reference/integer_ops/conv.h
+```
+
+Download the unit tests for testing your implementation under your lab5 project directory:
+```sh
+$ cd ${CFU_ROOT}/proj/lab5_proj
+$ mkdir -p src/tensorflow/lite/micro/kernels
+$ wget -P src/tensorflow/lite/micro/kernels \
+  https://github.com/nycu-caslab/AAML2024/raw/main/lab5_util/functional_cfu_tests.cc
+$ wget -P src/ \
+  https://github.com/nycu-caslab/AAML2024/raw/main/lab5_util/tflite_unit_tests.cc
 ```
 
 ### Evaluation Criteria
@@ -190,6 +200,7 @@ Now you have a working systolic array that can do matmul correctly, and a im2col
 Since the the buffer size of systolic array is limited, you might need **tiling** for the matrix multiplication. If you are not familiar with it, you can refer to this article:  
 [How to tile matrix multiplication](https://alvinwan.com/how-to-tile-matrix-multiplication/)
 
+Here’s a simple example for you. Here, T represents the size of each tile, which you may want to set based on the buffer size. In addition to the outer loops, some inner loops may be required to manage the sending and receiving logic.
 ```cpp
 constexpr int T; // tile size
 
@@ -204,7 +215,7 @@ for (int m = 0; m < pad_M; m += T) {
 }
 ```
 
-You may run into some boundary problems when padding. Handle the values that are out of boundary correctly to achieve the correct result.
+You may run into some boundary problems when padding. **Handle the values that are out of boundary correctly to achieve the correct result.**
 
 Please note that there are `input_offset` when doing convolution, you may either modify the hardware to accumulate with the offset, or try any method as you see fit.
 
@@ -233,16 +244,16 @@ acc += filter_val * (input_val + `input_offset`)
 ````
 
 ### Evaluation Criteria
-Note that your systolic array + im2col shall be faster than lab2's SIMD method, we will be running several labels to make sure you have done everything right. 
+We will test the performance of your implemetation base on the quantized KWS model provided in lab2. Note that your systolic array + im2col shall be faster than lab2's SIMD method, we will be running several labels to make sure you have done everything right. 
 
-Also, to earn the score for this part, you must successfully complete the `TFLite Unit Tests` without any failures.
+Also, to earn the score for this part, you still need to complete the `TFLite Unit Tests` without any failures.
 ```{important} 
 You will get **0%** if you can't pass the `TFLite Unit Tests` or didn't meet the requirement.
 ```
 
-| Cycles of Counter 6 |  > XM |      XM | <  XM |
-| ------------------- |:----- |:------- |:----- |
-| Score               | 0     | 20      | 50    |
+| Cycles of Counter 6 | > 650M  | 650~550M  | 550~480M | < 480M |
+| ------------------- | ------- | --------- |:-------- |:------ |
+| Score               | 0       | 30        | 40       | 50     |
 
 
 ## Questions in the Demo - 10%
